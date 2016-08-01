@@ -1,17 +1,18 @@
 #pragma once
 #include "ofMain.h"
+#include "ThreadedTwitterObject.h"
 #include "ofxJSON.h"
 #include "Tweet.h"
 
 class TimeLine {
 public:
-    void displayTweetsFromJSON(int x, int y);
     void getTweetsFromTwitter(string username, int limit);
     void parseResults();
-    
-    ofxJSONElement result;
-    bool canParse = false;
+    void threadedFunction();
+    bool loading = false;
     string mUserName;
-    
+    ofxJSONElement result;
     vector<Tweet *> tweets;
+    
+    ThreadedTwitterObject threadedTwitterQuery;
 };
