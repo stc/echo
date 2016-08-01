@@ -8,11 +8,11 @@ class TimeLine {
 public:
     void getTweetsFromTwitter(string username, int limit);
     void parseResults();
-    void threadedFunction();
+    void removeFile();
     bool loading = false;
     string mUserName;
     ofxJSONElement result;
     vector<Tweet *> tweets;
-    
+    ofFile mFile;
     ThreadedTwitterObject threadedTwitterQuery;
 };

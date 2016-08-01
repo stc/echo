@@ -33,7 +33,7 @@ public:
             else {
                 ofLogWarning("threadedFunction()") << "Unable to lock mutex.";
             }
-            waitForThread(true,5000);
+            //waitForThread(true,5000);
         }
     }
 

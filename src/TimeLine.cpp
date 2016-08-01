@@ -6,6 +6,13 @@ void TimeLine::getTweetsFromTwitter(string username, int limit) {
     loading = true;
 }
 
+void TimeLine::removeFile() {
+    mFile = ofFile(ofToDataPath(mUserName) + ".json");
+    if(mFile.exists()) {
+        mFile.remove();
+    }
+}
+
 void TimeLine::parseResults() {
     bool parsingSuccessful = result.open(ofToDataPath(mUserName) + ".json");
     if (parsingSuccessful) {

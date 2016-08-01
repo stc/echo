@@ -15,15 +15,16 @@
 */
 
 void ofApp::setup(){
-    string name = "_stc";
     timelines.push_back(new TimeLine());
 }
 
 void ofApp::update(){
     for(auto timeline : timelines) {
-        if(timeline->loading && !timeline->threadedTwitterQuery.isThreadRunning()) {
-            timeline->parseResults();
+        ofFile mFile = ofFile(ofToDataPath(timeline->mUserName) + ".json");
+        if(mFile.exists() && timeline->loading) {
             timeline->loading = false;
+            timeline->threadedTwitterQuery.stop();
+            timeline->parseResults();
         }
     }
 }
@@ -40,7 +41,8 @@ void ofApp::draw(){
 }
 
 void ofApp::keyPressed(int key){
-    timelines[0]->getTweetsFromTwitter("congressedits", 40);
+    timelines[0]->removeFile();
+    timelines[0]->getTweetsFromTwitter("_stc", 40);
 }
 void ofApp::keyReleased(int key){}
 void ofApp::mouseMoved(int x, int y ){}
