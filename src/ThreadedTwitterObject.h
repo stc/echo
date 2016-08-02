@@ -19,11 +19,11 @@ public:
         while(isThreadRunning()) {
             if(lock()) {
                 string path_to_twurl = "/Library/Ruby/Gems/2.0.0/gems/twurl-0.9.3/bin/";
-                string cmd = path_to_twurl + "twurl \"/1.1/statuses/user_timeline.json?screen_name=congressedits&count=" + mLimit + "\" > " + ofToDataPath(mUserName + ".json");
+                string cmd = path_to_twurl + "twurl \"/1.1/statuses/user_timeline.json?screen_name=" + mUserName + "&count=" + mLimit + "\" > " + ofToDataPath(mUserName + ".json");
                 system(cmd.c_str());
                 
                 unlock();
-                sleep(1000);
+                sleep(100);
 
                 if(shouldThrowTestException > 0) {
                     shouldThrowTestException = 0;
@@ -33,7 +33,7 @@ public:
             else {
                 ofLogWarning("threadedFunction()") << "Unable to lock mutex.";
             }
-            //waitForThread(true,5000);
+            waitForThread(true,1);
         }
     }
 

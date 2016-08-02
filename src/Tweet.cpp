@@ -23,7 +23,7 @@ Tweet::Tweet(int index, string date, string text) {
     // should be based on month
     mPos = ofVec2f(20, index * 30);
     
-    mTextFont.load("fonts/Tsukushi.ttc",8);
+    mTextFont.load("fonts/Tsukushi.ttc",10);
     splittedText = ofSplitString(mText, "http");
 }
 
