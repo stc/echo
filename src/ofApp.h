@@ -1,6 +1,7 @@
 #pragma once
 #include "ofMain.h"
 #include "TimeLine.h"
+#include "BaseView.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -18,5 +19,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+    
         vector< TimeLine * > timelines;
+        BaseView baseView;
 };

@@ -30,12 +30,12 @@ Tweet::Tweet(int index, string date, string text) {
 void Tweet::draw() {
     ofPushMatrix();
     ofTranslate(mPos);
-    ofSetColor(255,100,0);
+    ofSetColor(255,100,0,140);
     mTextFont.drawString(ofToString(mYear), 0, 15);
     mTextFont.drawString(ofToString(mMonth), 40, 15);
     mTextFont.drawString(ofToString(mDay), 80, 15);
     
-    ofSetColor(255);
+    ofSetColor(255,140);
     
     mTextFont.drawString(splittedText[0], 0, 30);
     ofPopMatrix();

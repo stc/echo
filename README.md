@@ -1,6 +1,9 @@
 # echo
 Realtime twitter bot sonification based on [anon](https://github.com/edsu/anon) &amp; SodaLib
 
+## Status
+Unfinished code, setting up environment <....... ... ...  ...>
+
 ## Software Components
 
 Built with OpenFrameworks 0.9.3. Targeted OS-es: OSX, Raspbian Jessie (Linux Arm)

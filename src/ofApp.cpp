@@ -1,21 +1,8 @@
 #include "ofApp.h"
 
-/*
-//TODO: 
- + add map to App
- + add mapPosition to tweets / add displayOnMap function
- 
- + select & load multiple bots
- + add displayAsTimeLine function
- 
- + add playhead to App
- + add sound + mixer interaction
- + add animation
- 
-*/
-
 void ofApp::setup(){
     timelines.push_back(new TimeLine());
+    timelines[0]->getTweetsFromTwitter("congressedits", 40);
 }
 
 void ofApp::update(){
@@ -33,13 +20,15 @@ void ofApp::update(){
 
 void ofApp::draw(){
     ofBackground(0);
+    baseView.draw();
+    
     for(auto timeline : timelines) {
         for(auto tweet : timeline->tweets) {
             tweet->draw();
         }
     }
     
-    ofDrawCircle(ofGetFrameNum()%ofGetWidth(),100,50);
+    //ofDrawCircle(ofGetFrameNum()%ofGetWidth(),100,50);
 }
 
 void ofApp::keyPressed(int key){
