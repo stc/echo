@@ -2,7 +2,8 @@
 
 void ofApp::setup(){
     timelines.push_back(new TimeLine());
-    timelines[0]->getTweetsFromTwitter("congressedits", 40);
+    ofVec2f mapPos = ofVec2f(10,10);
+    timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
 }
 
 void ofApp::update(){
@@ -24,7 +25,7 @@ void ofApp::draw(){
     
     for(auto timeline : timelines) {
         for(auto tweet : timeline->tweets) {
-            tweet->draw();
+            tweet->drawRawView();
         }
     }
     
@@ -33,7 +34,8 @@ void ofApp::draw(){
 
 void ofApp::keyPressed(int key){
     if(!timelines[0]->threadedTwitterQuery.isThreadRunning()) {
-        timelines[0]->getTweetsFromTwitter("congressedits", 40);
+        ofVec2f mapPos = ofVec2f(10,10);
+        timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
     }
 }
 

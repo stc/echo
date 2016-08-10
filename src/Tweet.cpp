@@ -1,6 +1,6 @@
 #include "Tweet.h"
 
-Tweet::Tweet(int index, string date, string text) {
+Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     mDate = date;
     mText = text;
     
@@ -20,16 +20,19 @@ Tweet::Tweet(int index, string date, string text) {
     if(str[1] == "Nov") mMonth = 11;
     if(str[1] == "Dec") mMonth = 12;
     
-    // should be based on month
-    mPos = ofVec2f(20, index * 30);
+    mRawPos = ofVec2f(20, index * 30);
+    mMapPos = mapPos;
+    
+    //  should be based on date
+    mTimeLinePos = ofVec2f(index, 0);
     
     mTextFont.load("fonts/Tsukushi.ttc",10);
     splittedText = ofSplitString(mText, "http");
 }
 
-void Tweet::draw() {
+void Tweet::drawRawView() {
     ofPushMatrix();
-    ofTranslate(mPos);
+    ofTranslate(mRawPos);
     ofSetColor(255,100,0,140);
     mTextFont.drawString(ofToString(mYear), 0, 15);
     mTextFont.drawString(ofToString(mMonth), 40, 15);
@@ -39,4 +42,12 @@ void Tweet::draw() {
     
     mTextFont.drawString(splittedText[0], 0, 30);
     ofPopMatrix();
+}
+
+void Tweet::drawMapView() {
+    //...
+}
+
+void Tweet::drawTimeLineView() {
+    //...
 }

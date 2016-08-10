@@ -1,7 +1,8 @@
 #include "TimeLine.h"
 
-void TimeLine::getTweetsFromTwitter(string username, int limit) {
+void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos) {
     mUserName = username;
+    mMapPos = mapPos;
     threadedTwitterQuery.start(mUserName, limit);
     loading = true;
     parsed = false;
@@ -29,7 +30,7 @@ void TimeLine::parseResults() {
 void TimeLine::loadTweets() {
     string date = result[index]["created_at"].asString();
     string txt = result[index]["text"].asString();
-    tweets.push_back(new Tweet(index, date, txt));
+    tweets.push_back(new Tweet(index, date, txt, mMapPos));
     index++;
     
     if(index == result.size()) {

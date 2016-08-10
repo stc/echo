@@ -6,7 +6,7 @@
 
 class TimeLine {
 public:
-    void getTweetsFromTwitter(string username, int limit);
+    void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos);
     void parseResults();
     void reset();
     void loadTweets();
@@ -18,4 +18,5 @@ public:
     ofFile mFile;
     ThreadedTwitterObject threadedTwitterQuery;
     int index;
+    ofVec2f mMapPos;
 };

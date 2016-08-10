@@ -3,11 +3,16 @@
 
 class Tweet {
 public:
-    Tweet(int index, string date, string text);
-    void draw();
+    Tweet(int index, string date, string text, ofVec2f mapPos);
+    void drawRawView();
+    void drawMapView();
+    void drawTimeLineView();
     string mText;
     string mDate;
-    ofVec2f mPos;
+    
+    ofVec2f mRawPos;
+    ofVec2f mMapPos;
+    ofVec2f mTimeLinePos;
     
     int mMonth;
     int mYear;
