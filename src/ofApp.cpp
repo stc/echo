@@ -1,9 +1,17 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
-    timelines.push_back(new TimeLine());
-    ofVec2f mapPos = ofVec2f(10,10);
-    timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
+    for(int i=0; i<5; i++) timelines.push_back(new TimeLine());
+    ofVec2f mapPos = ofVec2f(332,190); // washington
+    timelines[0]->getTweetsFromTwitter("congressedits", 10, mapPos);
+    mapPos = ofVec2f(649,133);
+    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 10, mapPos);
+    mapPos = ofVec2f(581,132);
+    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 10, mapPos);
+    mapPos = ofVec2f(860,205);
+    timelines[3]->getTweetsFromTwitter("PakistanEdits", 10, mapPos);
+    mapPos = ofVec2f(1124,498);
+    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 10, mapPos);
 }
 
 void ofApp::update(){
@@ -16,7 +24,9 @@ void ofApp::update(){
                 timeline->loadTweets();
             }
         }
+        
     }
+    //cout << mouseX << " " << mouseY << endl;
 }
 
 void ofApp::draw(){
@@ -24,8 +34,9 @@ void ofApp::draw(){
     baseView.draw();
     
     for(auto timeline : timelines) {
-        for(auto tweet : timeline->tweets) {
-            tweet->drawRawView();
+        if(timeline->tweets.size()>1) {
+            bool over = ofVec2f(mouseX,mouseY).distance(timeline->tweets[0]->mMapPos) < 50 ? true : false;
+            timeline->tweets[0]->drawMapView(over);
         }
     }
     
@@ -33,10 +44,12 @@ void ofApp::draw(){
 }
 
 void ofApp::keyPressed(int key){
-    if(!timelines[0]->threadedTwitterQuery.isThreadRunning()) {
+    /*
+     if(!timelines[0]->threadedTwitterQuery.isThreadRunning()) {
         ofVec2f mapPos = ofVec2f(10,10);
         timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
     }
+     */
 }
 
 void ofApp::keyReleased(int key){}

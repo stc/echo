@@ -5,7 +5,7 @@ class Tweet {
 public:
     Tweet(int index, string date, string text, ofVec2f mapPos);
     void drawRawView();
-    void drawMapView();
+    void drawMapView(bool showText);
     void drawTimeLineView();
     string mText;
     string mDate;
