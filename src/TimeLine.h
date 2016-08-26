@@ -15,14 +15,14 @@ public:
     void drawTimeLine(ofVec2f p);
     
     bool loading = false;
-    bool parsed;
-    string mUserName;
+    bool parsed = false;
+    
+    string mUserName = "";
     ofxJSONElement result;
     vector<Tweet *> tweets;
     ofFile mFile;
     ThreadedTwitterObject threadedTwitterQuery;
     int index = 0;
     ofVec2f mMapPos;
-    
     ofTrueTypeFont mTextFont;
 };

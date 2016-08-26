@@ -46,6 +46,6 @@ public:
 
 protected:
     Poco::AtomicCounter shouldThrowTestException;
-    string mLimit;
-    string mUserName;
+    string mLimit = "";
+    string mUserName = "";
 };

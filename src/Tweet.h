@@ -16,9 +16,9 @@ public:
     ofVec2f mMapPos;
     ofVec2f mTimeLinePos;
     
-    int mMonth;
-    int mYear;
-    int mDay;
+    int mMonth = 0;
+    int mYear = 0;
+    int mDay = 0;
     
     ofTrueTypeFont mTextFont;
     vector<string> splittedText;

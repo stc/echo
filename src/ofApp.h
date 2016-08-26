@@ -22,4 +22,6 @@ class ofApp : public ofBaseApp{
     
         vector< TimeLine * > timelines;
         BaseView baseView;
+        bool checkInternetConnection();
+        bool mOnline;
 };

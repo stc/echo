@@ -1,6 +1,11 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
+    if(checkInternetConnection()) {
+        mOnline = true;
+    } else {
+        mOnline = false;
+    }
     for(int i=0; i<5; i++) timelines.push_back(new TimeLine());
     ofVec2f mapPos = ofVec2f(332,190); // washington
     timelines[0]->getTweetsFromTwitter("congressedits", 10, mapPos);
@@ -38,6 +43,23 @@ void ofApp::draw(){
             timelines[i]->tweets[0]->drawMapView(over);
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
         }
+    }
+    
+    if(!mOnline) {
+        ofSetColor(255);
+        ofDrawBitmapString("Network Error: Check your net connection", 20, 20);
+    }
+}
+
+bool ofApp::checkInternetConnection() {
+    int status = system("ping -c 2 google.com");
+    int ping_ret;
+    if (-1 != status) {
+        ping_ret = WEXITSTATUS(status);
+        if(ping_ret==0)
+            return true;
+        else
+            return false;
     }
 }
 
