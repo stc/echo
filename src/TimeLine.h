@@ -6,7 +6,7 @@
 
 class TimeLine {
 public:
-    TimeLine();
+    TimeLine(int year, int month, int day);
     
     void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos);
     void parseResults();
@@ -25,4 +25,15 @@ public:
     int index = 0;
     ofVec2f mMapPos;
     ofTrueTypeFont mTextFont;
+    
+    int cYear;
+    int cMonth;
+    int cDay;
+    
+    int getNumDaysInMonth(int year, int month);
+    
+    string monthNames[12] = {
+        "January","February","March","April","May","June","July", "August", "September", "October", "November", "December"
+    };
+
 };

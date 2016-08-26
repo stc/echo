@@ -23,5 +23,11 @@ class ofApp : public ofBaseApp{
         vector< TimeLine * > timelines;
         BaseView baseView;
         bool checkInternetConnection();
+    
         bool mOnline;
+        ofImage mNetworkError;
+    
+        int cYear;
+        int cMonth;
+        int cDay;
 };

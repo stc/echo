@@ -6,17 +6,26 @@ void ofApp::setup(){
     } else {
         mOnline = false;
     }
-    for(int i=0; i<5; i++) timelines.push_back(new TimeLine());
+    
+    mNetworkError.load("assets/NetworkError.png");
+    
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    cYear  = now->tm_year + 1900;
+    cMonth = now->tm_mon + 1;
+    cDay   =  now->tm_mday;
+    
+    for(int i=0; i<5; i++) timelines.push_back(new TimeLine(cYear, cMonth, cDay));
     ofVec2f mapPos = ofVec2f(332,190); // washington
-    timelines[0]->getTweetsFromTwitter("congressedits", 10, mapPos);
+    timelines[0]->getTweetsFromTwitter("congressedits", 100, mapPos);
     mapPos = ofVec2f(649,133);
-    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 10, mapPos);
+    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 100, mapPos);
     mapPos = ofVec2f(581,132);
-    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 10, mapPos);
+    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 100, mapPos);
     mapPos = ofVec2f(860,205);
-    timelines[3]->getTweetsFromTwitter("PakistanEdits", 10, mapPos);
+    timelines[3]->getTweetsFromTwitter("PakistanEdits", 100, mapPos);
     mapPos = ofVec2f(1124,498);
-    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 10, mapPos);
+    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 100, mapPos);
 }
 
 void ofApp::update(){
@@ -47,7 +56,7 @@ void ofApp::draw(){
     
     if(!mOnline) {
         ofSetColor(255);
-        ofDrawBitmapString("Network Error: Check your net connection", 20, 20);
+        mNetworkError.draw(ofGetWidth()/2-mNetworkError.getWidth()/2, ofGetHeight()/2-mNetworkError.getHeight()/2);
     }
 }
 
