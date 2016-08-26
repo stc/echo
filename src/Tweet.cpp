@@ -5,6 +5,7 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     mText = text;
     
     vector< string > str = ofSplitString(mDate, " ");
+    
     mYear = ofToInt(str[5]);
     mDay  = ofToInt(str[2]);
     if(str[1] == "Jan") mMonth = 1;
@@ -75,6 +76,7 @@ void Tweet::drawMapView(bool showText) {
     ofPopMatrix();
 }
 
-void Tweet::drawTimeLineView() {
-    //...
+void Tweet::drawTimeLineView(ofVec2f p) {
+    ofSetColor(255);
+    ofDrawRectangle(p,2,2);
 }

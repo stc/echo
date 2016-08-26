@@ -4,9 +4,11 @@
 class Tweet {
 public:
     Tweet(int index, string date, string text, ofVec2f mapPos);
+    
     void drawRawView();
     void drawMapView(bool showText);
-    void drawTimeLineView();
+    void drawTimeLineView(ofVec2f p);
+    
     string mText;
     string mDate;
     

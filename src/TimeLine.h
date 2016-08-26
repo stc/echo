@@ -6,10 +6,14 @@
 
 class TimeLine {
 public:
+    TimeLine();
+    
     void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos);
     void parseResults();
     void reset();
     void loadTweets();
+    void drawTimeLine(ofVec2f p);
+    
     bool loading = false;
     bool parsed;
     string mUserName;
@@ -17,6 +21,8 @@ public:
     vector<Tweet *> tweets;
     ofFile mFile;
     ThreadedTwitterObject threadedTwitterQuery;
-    int index;
+    int index = 0;
     ofVec2f mMapPos;
+    
+    ofTrueTypeFont mTextFont;
 };

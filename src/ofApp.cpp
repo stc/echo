@@ -24,7 +24,6 @@ void ofApp::update(){
                 timeline->loadTweets();
             }
         }
-        
     }
     //cout << mouseX << " " << mouseY << endl;
 }
@@ -33,14 +32,13 @@ void ofApp::draw(){
     ofBackground(0);
     baseView.draw();
     
-    for(auto timeline : timelines) {
-        if(timeline->tweets.size()>1) {
-            bool over = ofVec2f(mouseX,mouseY).distance(timeline->tweets[0]->mMapPos) < 50 ? true : false;
-            timeline->tweets[0]->drawMapView(over);
+    for(int i=0; i< timelines.size(); i++) {
+        if(timelines[i]->tweets.size()>1) {
+            bool over = ofVec2f(mouseX,mouseY).distance(timelines[i]->tweets[0]->mMapPos) < 50 ? true : false;
+            timelines[i]->tweets[0]->drawMapView(over);
+            timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
         }
     }
-    
-    //ofDrawCircle(ofGetFrameNum()%ofGetWidth(),100,50);
 }
 
 void ofApp::keyPressed(int key){
@@ -49,7 +47,7 @@ void ofApp::keyPressed(int key){
         ofVec2f mapPos = ofVec2f(10,10);
         timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
     }
-     */
+     */    
 }
 
 void ofApp::keyReleased(int key){}

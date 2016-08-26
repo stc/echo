@@ -1,5 +1,9 @@
 #include "TimeLine.h"
 
+TimeLine::TimeLine() {
+    mTextFont.load("fonts/Tsukushi.ttc",9);
+}
+
 void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos) {
     mUserName = username;
     mMapPos = mapPos;
@@ -37,5 +41,13 @@ void TimeLine::loadTweets() {
         loading = false;
         result.clear();
         index = 0;
+    }
+}
+
+void TimeLine::drawTimeLine(ofVec2f p) {
+    ofSetColor(255,244,71,200);
+    mTextFont.drawString(mUserName,p.x,p.y);
+    for(int i=0; i<tweets.size(); i++) {
+        tweets[i]->drawTimeLineView(ofVec2f(p.x + 200 + i*10,p.y));
     }
 }
