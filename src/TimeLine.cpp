@@ -7,9 +7,10 @@ TimeLine::TimeLine(int year, int month, int day) {
     cDay = day;
 }
 
-void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos) {
+void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry) {
     mUserName = username;
     mMapPos = mapPos;
+    mUserCountry = userCountry;
     threadedTwitterQuery.start(mUserName, limit);
     loading = true;
     parsed = false;
@@ -49,15 +50,28 @@ void TimeLine::loadTweets() {
 
 void TimeLine::drawTimeLine(ofVec2f p) {
     ofSetColor(255,244,71,200);
-    mTextFont.drawString(mUserName,p.x,p.y);
+    mTextFont.drawString(mUserName + " (" + mUserCountry + ")",p.x,p.y);
     
-    // works only in 2016 now!!
+    ofSetColor(255,100);
+    ofDrawLine(p.x + 140, p.y, ofGetWidth()-100,p.y);
+    
+    // Important! Works only in 2016 with the following code:
+    
     int tmpDateIndex = cDay;
     int dayIndex = 0;
     int monthIndex;
-    ofSetColor(255,244,71,100);
     
-    for(int i=0; i<30; i++) {
+    int timeLineOffset = ofGetWidth() / 2;
+    
+    
+    mTextFont.drawString(monthNames[cMonth-1], 16 + timeLineOffset, ofGetHeight()-120);
+    mTextFont.drawString(monthNames[cMonth-2], 16 + 150, ofGetHeight()-120);
+    
+    ofSetColor(255,20);
+    ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
+    ofDrawLine(16 + 150, ofGetHeight()-100, 16 + 150, ofGetHeight());
+    
+    for(int i=0; i<200; i++) {
         if(tmpDateIndex>=1) {
             dayIndex = cDay -i;
             monthIndex = cMonth;
@@ -65,30 +79,33 @@ void TimeLine::drawTimeLine(ofVec2f p) {
             if(i<tweets.size()) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
-                        int x = tweets[i]->mDay * 15 + 300;
-                        ofDrawBitmapString(ofToString(tweets[i]->mDay),x, p.y-10);
+                        int x = tweets[i]->mDay * 16 + timeLineOffset;
+                        ofSetColor(255,244,71,100);
                         ofDrawCircle(x, p.y,3);
+                        ofSetColor(50);
+                        mTextFont.drawString(ofToString(tweets[i]->mDay),x, ofGetHeight()-100);
                     }
                 }
             }
             
         }else {
-            dayIndex = getNumDaysInMonth(2016, cMonth-1) - i + cDay;
+            dayIndex = getNumDaysInMonth(cYear, cMonth-1) - i + cDay;
             monthIndex = cMonth-1;
             
             if(i<tweets.size()) {
+                
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
-                        int x = (tweets[i]->mDay * 15 + 300) - (cDay+1) * 15;
-                        ofDrawBitmapString(ofToString(tweets[i]->mDay),x, p.y-10);
+                        int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
+                        ofSetColor(255,244,71,100);
                         ofDrawCircle(x, p.y,3);
+                        ofSetColor(50);
+                        mTextFont.drawString(ofToString(tweets[i]->mDay),x, ofGetHeight()-100);
                     }
                 }
             }
         }
         tmpDateIndex--;
-        
-        
     }
 }
 

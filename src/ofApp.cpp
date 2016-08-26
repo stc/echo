@@ -17,15 +17,15 @@ void ofApp::setup(){
     
     for(int i=0; i<5; i++) timelines.push_back(new TimeLine(cYear, cMonth, cDay));
     ofVec2f mapPos = ofVec2f(332,190); // washington
-    timelines[0]->getTweetsFromTwitter("congressedits", 100, mapPos);
+    timelines[0]->getTweetsFromTwitter("congressedits", 200, mapPos, "US");
     mapPos = ofVec2f(649,133);
-    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 100, mapPos);
+    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 200, mapPos, "DE");
     mapPos = ofVec2f(581,132);
-    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 100, mapPos);
+    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 200, mapPos, "IR");
     mapPos = ofVec2f(860,205);
-    timelines[3]->getTweetsFromTwitter("PakistanEdits", 100, mapPos);
+    timelines[3]->getTweetsFromTwitter("PakistanEdits", 200, mapPos, "PK");
     mapPos = ofVec2f(1124,498);
-    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 100, mapPos);
+    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 200, mapPos, "AUS");
 }
 
 void ofApp::update(){
@@ -39,7 +39,6 @@ void ofApp::update(){
             }
         }
     }
-    //cout << mouseX << " " << mouseY << endl;
 }
 
 void ofApp::draw(){
@@ -58,6 +57,9 @@ void ofApp::draw(){
         ofSetColor(255);
         mNetworkError.draw(ofGetWidth()/2-mNetworkError.getWidth()/2, ofGetHeight()/2-mNetworkError.getHeight()/2);
     }
+    
+    ofSetColor(255);
+    ofDrawBitmapString(ofToString(int(ofGetFrameRate())), 20,20);
 }
 
 bool ofApp::checkInternetConnection() {

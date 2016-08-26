@@ -8,7 +8,7 @@ class TimeLine {
 public:
     TimeLine(int year, int month, int day);
     
-    void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos);
+    void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry);
     void parseResults();
     void reset();
     void loadTweets();
@@ -18,6 +18,7 @@ public:
     bool parsed = false;
     
     string mUserName = "";
+    string mUserCountry = "";
     ofxJSONElement result;
     vector<Tweet *> tweets;
     ofFile mFile;
