@@ -2,6 +2,7 @@
 #include "ofMain.h"
 #include "TimeLine.h"
 #include "BaseView.h"
+#include "Tweet.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -24,8 +25,13 @@ class ofApp : public ofBaseApp{
         BaseView baseView;
         bool checkInternetConnection();
     
+        int getSequence(TimeLine * t);
+        float playHead = 0;
+    
         bool mOnline;
         ofImage mNetworkError;
+    
+        int cTweet;
     
         int cYear;
         int cMonth;

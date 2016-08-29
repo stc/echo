@@ -23,9 +23,8 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     
     mRawPos = ofVec2f(20, index * 30);
     mMapPos = mapPos;
-    
-    //  should be based on date
-    mTimeLinePos = ofVec2f(index, 0);
+    mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(300)-150);
+    //mTextPos = ofVec2f(0,0);
     
     mTextFont.load("fonts/DINBold.ttf",9);
     splittedText = ofSplitString(mText, "http");
@@ -45,20 +44,28 @@ void Tweet::drawRawView() {
     ofPopMatrix();
 }
 
-void Tweet::drawMapView(bool showText) {
+void Tweet::drawMapView() {
     ofPushMatrix();
     ofTranslate(mMapPos);
     ofSetColor(255);
     ofDrawCircle(0,0,3);
     
-    if(showText) {
+    ofTranslate(mTextPos);
+    if(textAlpha>0) {
+        ofSetColor(255,100);
+        ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
+        
         ofTranslate(10,0);
-        ofSetColor(255,244,71,200);
+        
+        ofSetColor(0,255);
+        ofDrawRectangle(-10,-10,200,100);
+        
+        ofSetColor(255,244,71,255);
         mTextFont.drawString(ofToString(mYear) + " / ", 0, 15);
         mTextFont.drawString(ofToString(mMonth) + " / ", 40, 15);
         mTextFont.drawString(ofToString(mDay), 60, 15);
     
-        ofSetColor(255,200);
+        ofSetColor(255,255);
         vector< string > mTxt = ofSplitString(splittedText[0]," ");
         int xoffset = 0;
         int yoffset = 0;
@@ -72,11 +79,16 @@ void Tweet::drawMapView(bool showText) {
             }
             mTextFont.drawString(mTxt[i],xoffset,yoffset + 15);
         }
+        textAlpha-=1;
     }
     ofPopMatrix();
 }
 
 void Tweet::drawTimeLineView(ofVec2f p) {
-    ofSetColor(255);
-    ofDrawRectangle(p,2,2);
+    ofSetColor(255,244,71);
+    ofDrawRectangle(p.x, p.y-2,4,4);
+    ofSetColor(255,alpha);
+    ofDrawRectangle(p.x-2, p.y-4,6,8);
+    if(alpha>0) alpha-=5;
+    mTimeLinePos = ofVec2f(p.x,p.y);
 }

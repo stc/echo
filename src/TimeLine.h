@@ -6,13 +6,13 @@
 
 class TimeLine {
 public:
-    TimeLine(int year, int month, int day);
+    TimeLine(int index, int year, int month, int day);
     
     void getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry);
     void parseResults();
     void reset();
     void loadTweets();
-    void drawTimeLine(int index, ofVec2f p);
+    void drawTimeLine(ofVec2f p);
     
     bool loading = false;
     bool parsed = false;
@@ -23,15 +23,21 @@ public:
     vector<Tweet *> tweets;
     ofFile mFile;
     ThreadedTwitterObject threadedTwitterQuery;
-    int index = 0;
+    int mIndex = 0;
     ofVec2f mMapPos;
     ofTrueTypeFont mTextFont;
     
     int cYear;
     int cMonth;
     int cDay;
+    int tlIndex;
+    
+    ofVec2f mP;
     
     int getNumDaysInMonth(int year, int month);
+    
+    int tlMin = 0;
+    int tlMax = 0;
     
     string monthNames[12] = {
         "January","February","March","April","May","June","July", "August", "September", "October", "November", "December"

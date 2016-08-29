@@ -1,10 +1,12 @@
 #include "TimeLine.h"
 
-TimeLine::TimeLine(int year, int month, int day) {
+TimeLine::TimeLine(int index, int year, int month, int day) {
     mTextFont.load("fonts/DINBold.ttf",9);
     cYear = year;
     cMonth = month;
     cDay = day;
+    
+    tlIndex = index;
 }
 
 void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry) {
@@ -36,24 +38,28 @@ void TimeLine::parseResults() {
 }
 
 void TimeLine::loadTweets() {
-    string date = result[index]["created_at"].asString();
-    string txt = result[index]["text"].asString();
-    tweets.push_back(new Tweet(index, date, txt, mMapPos));
-    index++;
+    string date = result[mIndex]["created_at"].asString();
+    string txt = result[mIndex]["text"].asString();
+    tweets.push_back(new Tweet(mIndex, date, txt, mMapPos));
+    mIndex++;
     
-    if(index == result.size()) {
+    if(mIndex == result.size()) {
         loading = false;
         result.clear();
-        index = 0;
+        mIndex = 0;
     }
 }
 
-void TimeLine::drawTimeLine(int index, ofVec2f p) {
+void TimeLine::drawTimeLine(ofVec2f p) {
+    mP = p;
     ofSetColor(255,244,71);
     mTextFont.drawString(mUserName + " (" + mUserCountry + ")",p.x,p.y);
     
+    tlMin = 16 + 150;
+    tlMax = tlMax = ofGetWidth()-100;
+
     ofSetColor(100);
-    ofDrawLine(p.x + 140, p.y, ofGetWidth()-100,p.y);
+    ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
     
     // Important! Works only in 2016 with the following code:
     
@@ -63,13 +69,22 @@ void TimeLine::drawTimeLine(int index, ofVec2f p) {
     
     int timeLineOffset = ofGetWidth() / 2;
     
-    
-    if(index == 0) {
+    // check if this is the first timeline
+    if(tlIndex == 0) {
         mTextFont.drawString(monthNames[cMonth-1], 16 + timeLineOffset, ofGetHeight()-120);
         mTextFont.drawString(monthNames[cMonth-2], 16 + 150, ofGetHeight()-120);
         ofSetColor(100);
         ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
-        ofDrawLine(16 + 150, ofGetHeight()-100, 16 + 150, ofGetHeight());
+        ofDrawLine(16 + 140, ofGetHeight()-100, 16 + 140, ofGetHeight());
+        
+        // test on RPI if not too heavy
+        ofSetColor(60);
+        for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
+            mTextFont.drawString(ofToString(i+1), tlMin - 8 + i*16, ofGetHeight()-100);
+        }
+        for(int i=0; i< getNumDaysInMonth(cYear, cMonth); i++) {
+            mTextFont.drawString(ofToString(i+1), 16 + timeLineOffset + i*16, ofGetHeight()-100);
+        }
     }
     
     for(int i=0; i<200; i++) {
@@ -81,8 +96,7 @@ void TimeLine::drawTimeLine(int index, ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = tweets[i]->mDay * 16 + timeLineOffset;
-                        ofSetColor(255,244,71);
-                        ofDrawRectangle(x, p.y-2,4,4);
+                        tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
                     }
                 }
             }
@@ -96,8 +110,7 @@ void TimeLine::drawTimeLine(int index, ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
-                        ofSetColor(255,244,71);
-                        ofDrawRectangle(x, p.y-2,4,4);
+                        tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
                     }
                 }
             }

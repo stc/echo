@@ -6,7 +6,7 @@ public:
     Tweet(int index, string date, string text, ofVec2f mapPos);
     
     void drawRawView();
-    void drawMapView(bool showText);
+    void drawMapView();
     void drawTimeLineView(ofVec2f p);
     
     string mText;
@@ -15,6 +15,7 @@ public:
     ofVec2f mRawPos;
     ofVec2f mMapPos;
     ofVec2f mTimeLinePos;
+    ofVec2f mTextPos;
     
     int mMonth = 0;
     int mYear = 0;
@@ -22,4 +23,7 @@ public:
     
     ofTrueTypeFont mTextFont;
     vector<string> splittedText;
+    
+    int alpha = 0;
+    float textAlpha = 0;
 };
