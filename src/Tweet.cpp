@@ -54,18 +54,14 @@ void Tweet::drawMapView() {
     if(textAlpha>0) {
         ofSetColor(255,100);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
-        
         ofTranslate(10,0);
-        
-        ofSetColor(0,255);
-        ofDrawRectangle(-10,-10,200,100);
         
         ofSetColor(255,244,71,255);
         mTextFont.drawString(ofToString(mYear) + " / ", 0, 15);
         mTextFont.drawString(ofToString(mMonth) + " / ", 40, 15);
         mTextFont.drawString(ofToString(mDay), 60, 15);
     
-        ofSetColor(255,255);
+        
         vector< string > mTxt = ofSplitString(splittedText[0]," ");
         int xoffset = 0;
         int yoffset = 0;
@@ -77,6 +73,9 @@ void Tweet::drawMapView() {
                 yoffset +=15;
                 xoffset = 0;
             }
+            ofSetColor(0);
+            ofDrawRectangle(xoffset,yoffset,mTextFont.getStringBoundingBox(mTxt[i], 0, 0).width + 15,20);
+            ofSetColor(255,255);
             mTextFont.drawString(mTxt[i],xoffset,yoffset + 15);
         }
         textAlpha-=1;

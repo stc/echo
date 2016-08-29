@@ -98,15 +98,7 @@ int ofApp::getSequence(TimeLine * t) {
     }
 }
 
-void ofApp::keyPressed(int key){
-    /*
-     if(!timelines[0]->threadedTwitterQuery.isThreadRunning()) {
-        ofVec2f mapPos = ofVec2f(10,10);
-        timelines[0]->getTweetsFromTwitter("congressedits", 40, mapPos);
-    }
-     */    
-}
-
+void ofApp::keyPressed(int key){}
 void ofApp::keyReleased(int key){}
 void ofApp::mouseMoved(int x, int y ){}
 void ofApp::mouseDragged(int x, int y, int button){}
