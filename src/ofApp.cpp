@@ -49,7 +49,7 @@ void ofApp::draw(){
         if(timelines[i]->tweets.size()>1) {
             bool over = ofVec2f(mouseX,mouseY).distance(timelines[i]->tweets[0]->mMapPos) < 50 ? true : false;
             timelines[i]->tweets[0]->drawMapView(over);
-            timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
+            timelines[i]->drawTimeLine(i, ofVec2f(20,ofGetHeight()-20 - (i*15)));
         }
     }
     

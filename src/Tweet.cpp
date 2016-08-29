@@ -27,7 +27,7 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     //  should be based on date
     mTimeLinePos = ofVec2f(index, 0);
     
-    mTextFont.load("fonts/Tsukushi.ttc",9);
+    mTextFont.load("fonts/DINBold.ttf",9);
     splittedText = ofSplitString(mText, "http");
 }
 
@@ -54,8 +54,8 @@ void Tweet::drawMapView(bool showText) {
     if(showText) {
         ofTranslate(10,0);
         ofSetColor(255,244,71,200);
-        mTextFont.drawString(ofToString(mYear), 0, 15);
-        mTextFont.drawString(ofToString(mMonth), 40, 15);
+        mTextFont.drawString(ofToString(mYear) + " / ", 0, 15);
+        mTextFont.drawString(ofToString(mMonth) + " / ", 40, 15);
         mTextFont.drawString(ofToString(mDay), 60, 15);
     
         ofSetColor(255,200);

@@ -1,7 +1,7 @@
 #include "TimeLine.h"
 
 TimeLine::TimeLine(int year, int month, int day) {
-    mTextFont.load("fonts/Tsukushi.ttc",9);
+    mTextFont.load("fonts/DINBold.ttf",9);
     cYear = year;
     cMonth = month;
     cDay = day;
@@ -48,11 +48,11 @@ void TimeLine::loadTweets() {
     }
 }
 
-void TimeLine::drawTimeLine(ofVec2f p) {
-    ofSetColor(255,244,71,200);
+void TimeLine::drawTimeLine(int index, ofVec2f p) {
+    ofSetColor(255,244,71);
     mTextFont.drawString(mUserName + " (" + mUserCountry + ")",p.x,p.y);
     
-    ofSetColor(255,100);
+    ofSetColor(100);
     ofDrawLine(p.x + 140, p.y, ofGetWidth()-100,p.y);
     
     // Important! Works only in 2016 with the following code:
@@ -64,12 +64,13 @@ void TimeLine::drawTimeLine(ofVec2f p) {
     int timeLineOffset = ofGetWidth() / 2;
     
     
-    mTextFont.drawString(monthNames[cMonth-1], 16 + timeLineOffset, ofGetHeight()-120);
-    mTextFont.drawString(monthNames[cMonth-2], 16 + 150, ofGetHeight()-120);
-    
-    ofSetColor(255,20);
-    ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
-    ofDrawLine(16 + 150, ofGetHeight()-100, 16 + 150, ofGetHeight());
+    if(index == 0) {
+        mTextFont.drawString(monthNames[cMonth-1], 16 + timeLineOffset, ofGetHeight()-120);
+        mTextFont.drawString(monthNames[cMonth-2], 16 + 150, ofGetHeight()-120);
+        ofSetColor(100);
+        ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
+        ofDrawLine(16 + 150, ofGetHeight()-100, 16 + 150, ofGetHeight());
+    }
     
     for(int i=0; i<200; i++) {
         if(tmpDateIndex>=1) {
@@ -80,10 +81,8 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = tweets[i]->mDay * 16 + timeLineOffset;
-                        ofSetColor(255,244,71,100);
-                        ofDrawCircle(x, p.y,3);
-                        ofSetColor(50);
-                        mTextFont.drawString(ofToString(tweets[i]->mDay),x, ofGetHeight()-100);
+                        ofSetColor(255,244,71);
+                        ofDrawRectangle(x, p.y-2,4,4);
                     }
                 }
             }
@@ -97,10 +96,8 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
-                        ofSetColor(255,244,71,100);
-                        ofDrawCircle(x, p.y,3);
-                        ofSetColor(50);
-                        mTextFont.drawString(ofToString(tweets[i]->mDay),x, ofGetHeight()-100);
+                        ofSetColor(255,244,71);
+                        ofDrawRectangle(x, p.y-2,4,4);
                     }
                 }
             }

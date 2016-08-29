@@ -1,11 +1,11 @@
 #include "BaseView.h"
 
 BaseView::BaseView() {
-    mapImg.load("assets/WorldMap.png");
+    mapImg.load("assets/WorldMap.jpg");
 }
 
 void BaseView::draw() {
-    ofSetColor(255,50);
+    ofSetColor(255);
     mapImg.draw(0,0);
     
     ofSetColor(0,180);

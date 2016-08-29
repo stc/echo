@@ -12,7 +12,7 @@ public:
     void parseResults();
     void reset();
     void loadTweets();
-    void drawTimeLine(ofVec2f p);
+    void drawTimeLine(int index, ofVec2f p);
     
     bool loading = false;
     bool parsed = false;
