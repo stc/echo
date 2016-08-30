@@ -4,6 +4,8 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     mDate = date;
     mText = text;
     
+    mIndex = index;
+    
     vector< string > str = ofSplitString(mDate, " ");
     
     mYear = ofToInt(str[5]);
@@ -48,7 +50,8 @@ void Tweet::drawMapView() {
     ofPushMatrix();
     ofTranslate(mMapPos);
     ofSetColor(255);
-    ofDrawCircle(0,0,3);
+    ofDrawLine(-3,0,3,0);
+    ofDrawLine(0,-3,0,3);
     
     ofTranslate(mTextPos);
     if(textAlpha>0) {
@@ -76,7 +79,7 @@ void Tweet::drawMapView() {
             ofSetColor(0);
             ofDrawRectangle(xoffset,yoffset,mTextFont.getStringBoundingBox(mTxt[i], 0, 0).width + 15,20);
             ofSetColor(255,255);
-            mTextFont.drawString(mTxt[i],xoffset,yoffset + 15);
+           mTextFont.drawString(mTxt[i],xoffset,yoffset + 15);
         }
         textAlpha-=1;
     }

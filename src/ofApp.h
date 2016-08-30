@@ -31,8 +31,6 @@ class ofApp : public ofBaseApp{
         bool mOnline;
         ofImage mNetworkError;
     
-        int cTweet;
-    
         int cYear;
         int cMonth;
         int cDay;

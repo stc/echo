@@ -26,4 +26,5 @@ public:
     
     int alpha = 0;
     float textAlpha = 0;
+    int mIndex = 0;
 };

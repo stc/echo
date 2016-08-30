@@ -15,7 +15,9 @@ void ofApp::setup(){
     cMonth = now->tm_mon + 1;
     cDay   =  now->tm_mday;
     
-    for(int i=0; i<5; i++) timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
+    for(int i=0; i<5; i++) {
+        timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
+    }
     ofVec2f mapPos = ofVec2f(332,190); // washington
     timelines[0]->getTweetsFromTwitter("congressedits", 200, mapPos, "US");
     mapPos = ofVec2f(649,133);
@@ -47,12 +49,11 @@ void ofApp::draw(){
     
     for(int i=0; i< timelines.size(); i++) {
         if(timelines[i]->tweets.size()>1) {
-            bool over = ofVec2f(mouseX,mouseY).distance(timelines[i]->tweets[0]->mMapPos) < 50 ? true : false;
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
-            cTweet = getSequence(timelines[i]);
-            for(int j=0; j< timelines[i]->tweets.size(); j++) {
-                timelines[i]->tweets[j]->drawMapView();
-            }
+            int cTweet = getSequence(timelines[i]);
+            //for(int j=0; j< timelines[i]->tweets.size(); j++) {
+            if(cTweet>0 && cTweet < timelines[i]->tweets.size()) timelines[i]->tweets[cTweet]->drawMapView();
+            //}
         }
     }
     
@@ -86,13 +87,12 @@ int ofApp::getSequence(TimeLine * t) {
         ofDrawLine(playHead,ofGetHeight()-100,playHead,ofGetHeight());
     }
     
-    
     for(auto tweet : t->tweets) {
         if(tweet->mTimeLinePos.x > 0) {
             if(ofVec2f(playHead,t->mP.y).distance(tweet->mTimeLinePos) <2) {
                 tweet->alpha = 255;
                 tweet->textAlpha = 255;
-                return t->tlIndex;
+                return tweet->mIndex;
             }
         }
     }

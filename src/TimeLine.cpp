@@ -70,6 +70,7 @@ void TimeLine::drawTimeLine(ofVec2f p) {
     int timeLineOffset = ofGetWidth() / 2;
     
     // check if this is the first timeline
+    
     if(tlIndex == 0) {
         mTextFont.drawString(monthNames[cMonth-1], 16 + timeLineOffset, ofGetHeight()-120);
         mTextFont.drawString(monthNames[cMonth-2], 16 + 150, ofGetHeight()-120);
@@ -77,7 +78,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
         ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
         ofDrawLine(16 + 140, ofGetHeight()-100, 16 + 140, ofGetHeight());
         
+        
         // test on RPI if not too heavy
+        /*
         ofSetColor(60);
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
             mTextFont.drawString(ofToString(i+1), tlMin - 8 + i*16, ofGetHeight()-100);
@@ -85,7 +88,10 @@ void TimeLine::drawTimeLine(ofVec2f p) {
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth); i++) {
             mTextFont.drawString(ofToString(i+1), 16 + timeLineOffset + i*16, ofGetHeight()-100);
         }
+        */
     }
+
+    ofSetColor(255,244,71);
     
     for(int i=0; i<200; i++) {
         if(tmpDateIndex>=1) {
@@ -96,7 +102,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = tweets[i]->mDay * 16 + timeLineOffset;
-                        tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
+                        //tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
+                        tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                        ofDrawLine(x,p.y-2,x,p.y+2);
                     }
                 }
             }
@@ -110,7 +118,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
-                        tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
+                        //tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
+                        tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                        ofDrawLine(x,p.y-2,x,p.y+2);
                     }
                 }
             }
