@@ -104,7 +104,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                         int x = tweets[i]->mDay * 16 + timeLineOffset;
                         //tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
                         tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                        ofSetLineWidth(4);
                         ofDrawLine(x,p.y-2,x,p.y+2);
+                        ofSetLineWidth(1);
                     }
                 }
             }
@@ -120,7 +122,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
                         int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
                         //tweets[i]->drawTimeLineView(ofVec2f(x,p.y));
                         tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                        ofSetLineWidth(4);
                         ofDrawLine(x,p.y-2,x,p.y+2);
+                        ofSetLineWidth(1);
                     }
                 }
             }

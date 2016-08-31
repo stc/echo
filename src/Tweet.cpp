@@ -81,16 +81,18 @@ void Tweet::drawMapView() {
             ofSetColor(255,255);
            mTextFont.drawString(mTxt[i],xoffset,yoffset + 15);
         }
-        textAlpha-=1;
+        //textAlpha-=0.1;
     }
     ofPopMatrix();
 }
 
 void Tweet::drawTimeLineView(ofVec2f p) {
+    /*
     ofSetColor(255,244,71);
     ofDrawRectangle(p.x, p.y-2,4,4);
     ofSetColor(255,alpha);
     ofDrawRectangle(p.x-2, p.y-4,6,8);
     if(alpha>0) alpha-=5;
     mTimeLinePos = ofVec2f(p.x,p.y);
+    */
 }

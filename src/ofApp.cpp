@@ -16,6 +16,7 @@ void ofApp::setup(){
     cDay   =  now->tm_mday;
     
     for(int i=0; i<5; i++) {
+        cTweets.push_back(-1);
         timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
     }
     ofVec2f mapPos = ofVec2f(332,190); // washington
@@ -28,6 +29,8 @@ void ofApp::setup(){
     timelines[3]->getTweetsFromTwitter("PakistanEdits", 200, mapPos, "PK");
     mapPos = ofVec2f(1124,498);
     timelines[4]->getTweetsFromTwitter("AussieParlEdits", 200, mapPos, "AUS");
+    
+    ofBackground(0);
 }
 
 void ofApp::update(){
@@ -44,16 +47,16 @@ void ofApp::update(){
 }
 
 void ofApp::draw(){
-    ofBackground(0);
     baseView.draw();
-    
+    //for(int j=0; j< cTweets.size(); j++) cout << cTweets[j] << " ";
+    //cout << endl;
     for(int i=0; i< timelines.size(); i++) {
-        if(timelines[i]->tweets.size()>1) {
+        if(timelines[i]->tweets.size()>0) {
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
-            int cTweet = getSequence(timelines[i]);
-            //for(int j=0; j< timelines[i]->tweets.size(); j++) {
-            if(cTweet>0 && cTweet < timelines[i]->tweets.size()) timelines[i]->tweets[cTweet]->drawMapView();
-            //}
+            getSequence(timelines[i]);
+            //if(cTmpTweet>=0) cTweets[i] = getSequence(timelines[i]);
+            //timelines[i]->tweets[0]->drawMapView();
+            if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) timelines[i]->tweets[cTweets[i]]->drawMapView();
         }
     }
     
@@ -79,19 +82,24 @@ bool ofApp::checkInternetConnection() {
 }
 
 int ofApp::getSequence(TimeLine * t) {
-    if(playHead > t->tlMax) playHead = t->tlMin;
-    playHead+=0.05;
-    
     if(t->tlIndex == 0) {
         ofSetColor(255);
         ofDrawLine(playHead,ofGetHeight()-100,playHead,ofGetHeight());
+        
+        if(playHead >= t->tlMax) {
+            playHead = t->tlMin;
+            for(int i=0; i< timelines.size(); i++ ) cTweets[i] = -1;
+            for(auto tweet : t->tweets) tweet->textAlpha = 0;
+        }
+        playHead+=1;
     }
-    
+
     for(auto tweet : t->tweets) {
         if(tweet->mTimeLinePos.x > 0) {
             if(ofVec2f(playHead,t->mP.y).distance(tweet->mTimeLinePos) <2) {
                 tweet->alpha = 255;
                 tweet->textAlpha = 255;
+                cTweets[t->tlIndex] = tweet->mIndex;
                 return tweet->mIndex;
             }
         }

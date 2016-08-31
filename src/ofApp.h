@@ -28,6 +28,8 @@ class ofApp : public ofBaseApp{
         int getSequence(TimeLine * t);
         float playHead = 0;
     
+        vector< int > cTweets;
+    
         bool mOnline;
         ofImage mNetworkError;
     
