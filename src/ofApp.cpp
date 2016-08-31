@@ -18,8 +18,11 @@ void ofApp::setup(){
     for(int i=0; i<5; i++) {
         cTweets.push_back(-1);
         timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
+        tunerAverage.push_back(0);
     }
-    ofVec2f mapPos = ofVec2f(332,190); // washington
+    
+
+    ofVec2f mapPos = ofVec2f(332,190);
     timelines[0]->getTweetsFromTwitter("congressedits", 200, mapPos, "US");
     mapPos = ofVec2f(649,133);
     timelines[1]->getTweetsFromTwitter("berlinEDUedits", 200, mapPos, "DE");
@@ -44,6 +47,33 @@ void ofApp::update(){
             }
         }
     }
+    #ifdef TARGET_LINUX_ARM
+        //  read from file that is updated by python, reading RPI's GPIO values
+        vector < string > linesRot;
+        ofBuffer buffer = ofBufferFromFile(ofToDataPath("python/rot.txt"));
+        for (auto line : buffer.getLines()){
+            linesRot.push_back(line);
+        }
+        if(linesRot.size() > 1) {
+            if(ofToInt(linesRot[1])!=pTunerVal) {
+                mTunerValue = ofToInt(linesRot[0]);
+                pTunerVal = ofToInt(linesRot[1]);
+                mCanMoveTuner = true;
+            }
+        }
+    
+        vector < string > linesSwitch;
+        ofBuffer mbuffer = ofBufferFromFile(ofToDataPath("python/switch.txt"));
+        for (auto line : mbuffer.getLines()){
+            linesSwitch.push_back(line);
+        }
+        if(linesSwitch.size() > 0) {
+            mTunerSwitch = ofToInt(linesSwitch[0]);
+        }
+    #else
+        // control tuner with keypresses
+        mTunerValue = -1;
+    #endif
 }
 
 void ofApp::draw(){
@@ -65,8 +95,52 @@ void ofApp::draw(){
         mNetworkError.draw(ofGetWidth()/2-mNetworkError.getWidth()/2, ofGetHeight()/2-mNetworkError.getHeight()/2);
     }
     
+    drawTuner();
+    
     ofSetColor(255);
-    ofDrawBitmapString(ofToString(int(ofGetFrameRate())), 20,20);
+    ofDrawBitmapString("fps > " + ofToString(int(ofGetFrameRate())), 20,20);
+    ofSetColor(255,0,0);
+    ofDrawBitmapString("encoder > " + ofToString(mTunerValue), 20,40);
+}
+
+void ofApp::drawTuner() {
+    if(mCanMoveTuner) {
+        //  avoid extreme values from sensor
+        if(mTunerValue > -2 && mTunerValue < 2) {
+            // filter out short wrong values
+            tunerAvgCounter++;
+            if(tunerAvgCounter>4) tunerAvgCounter = 0;
+            tunerAverage[tunerAvgCounter] = mTunerValue;
+            float sum = 0;
+            for(int i=0;i<tunerAverage.size(); i++) {
+                sum += tunerAverage[i];
+            }
+            if((sum >= 5 || sum <= -5)) {
+                mTunerTarget = mTunerPos + mTunerValue * -30;
+            }
+            
+            cout << " sum: " << sum << endl;
+        }
+        if(mTunerTarget<0) {
+            mTunerTarget = ofGetWidth();
+            mTunerPos = ofGetWidth();
+        }else if(mTunerTarget > ofGetWidth()) {
+            mTunerTarget = 0;
+            mTunerPos = 0;
+        }
+        mCanMoveTuner = false;
+    }
+    
+    float d = mTunerTarget - mTunerPos;
+    mTunerPos += d * mTunerEasing;
+    if(mTunerSwitch == 0) {
+        ofSetColor(51,216,255);
+    } else {
+        ofSetColor(255);
+    }
+    ofSetLineWidth(4);
+    ofDrawLine(mTunerPos,100,mTunerPos,ofGetHeight()-150);
+    ofSetLineWidth(1);
 }
 
 bool ofApp::checkInternetConnection() {

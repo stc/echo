@@ -36,4 +36,15 @@ class ofApp : public ofBaseApp{
         int cYear;
         int cMonth;
         int cDay;
+    
+        int mTunerValue = 0;
+        float mTunerTarget;
+        float mTunerPos;
+        float mTunerEasing = 0.05;
+        int pTunerVal;
+        void drawTuner();
+        bool mCanMoveTuner = false;
+        int mTunerSwitch = 0;
+        vector<int> tunerAverage;
+        int tunerAvgCounter = 0;
 };
