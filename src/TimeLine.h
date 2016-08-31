@@ -3,6 +3,7 @@
 #include "ThreadedTwitterObject.h"
 #include "ofxJSON.h"
 #include "Tweet.h"
+#include "ofxFontStash.h"
 
 class TimeLine {
 public:
@@ -25,7 +26,7 @@ public:
     ThreadedTwitterObject threadedTwitterQuery;
     int mIndex = 0;
     ofVec2f mMapPos;
-    ofTrueTypeFont mTextFont;
+    ofxFontStash mTextFont;
     
     int cYear;
     int cMonth;

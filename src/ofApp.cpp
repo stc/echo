@@ -78,14 +78,10 @@ void ofApp::update(){
 
 void ofApp::draw(){
     baseView.draw();
-    //for(int j=0; j< cTweets.size(); j++) cout << cTweets[j] << " ";
-    //cout << endl;
     for(int i=0; i< timelines.size(); i++) {
         if(timelines[i]->tweets.size()>0) {
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
             getSequence(timelines[i]);
-            //if(cTmpTweet>=0) cTweets[i] = getSequence(timelines[i]);
-            //timelines[i]->tweets[0]->drawMapView();
             if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) timelines[i]->tweets[cTweets[i]]->drawMapView();
         }
     }
@@ -171,7 +167,6 @@ int ofApp::getSequence(TimeLine * t) {
     for(auto tweet : t->tweets) {
         if(tweet->mTimeLinePos.x > 0) {
             if(ofVec2f(playHead,t->mP.y).distance(tweet->mTimeLinePos) <2) {
-                tweet->alpha = 255;
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
                 return tweet->mIndex;
