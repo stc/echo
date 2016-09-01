@@ -25,4 +25,6 @@ public:
     
     float textAlpha = 0;
     int mIndex = 0;
+    
+    bool mCanPlay = true;
 };

@@ -9,6 +9,15 @@ void ofApp::setup(){
     
     mNetworkError.load("assets/NetworkError.png");
     
+    int ticksPerBuffer = 8; // 8 * 64 = buffer len of 512
+    ofSoundStreamSetup(2, 2, this, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
+
+    soda.init();
+    soda.clear();
+    soda.createSampler("sonar","sounds/sonar.wav",10);
+    soda.createTexture("noise",10);
+    soda.save();
+
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     cYear  = now->tm_year + 1900;
@@ -17,11 +26,11 @@ void ofApp::setup(){
     
     for(int i=0; i<5; i++) {
         cTweets.push_back(-1);
+        cVolumes.push_back(0);
         timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
         tunerAverage.push_back(0);
     }
     
-
     ofVec2f mapPos = ofVec2f(332,190);
     timelines[0]->getTweetsFromTwitter("congressedits", 200, mapPos, "US");
     mapPos = ofVec2f(649,133);
@@ -88,9 +97,18 @@ void ofApp::draw(){
             timelines[i]->tweets[0]->drawMapView();
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
             getSequence(timelines[i]);
-            if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) timelines[i]->tweets[cTweets[i]]->drawMapView();
+            cVolumes[i] = timelines[i]->getVolume(ofVec2f(mTunerPos,timelines[i]->mMapPos.y));
+            
+            if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) {
+                timelines[i]->tweets[cTweets[i]]->drawMapView();
+                
+            }
         }
     }
+    if(ofGetFrameNum()% int(100 + ofRandom(100)) == 0) soda.set("noise")->shift(ofRandom(90)/100.+0.1,false);
+    auto v = std::max_element(std::begin(cVolumes), std::end(cVolumes));
+    soda.set("noise")->volume(1-*v);
+    
     
     if(!mOnline) {
         ofSetColor(255);
@@ -173,7 +191,14 @@ int ofApp::getSequence(TimeLine * t) {
             if(ofVec2f(playHead,t->mP.y).distance(tweet->mTimeLinePos) <2) {
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
+                if(tweet->mCanPlay) {
+                    soda.set("sonar")->shift((t->tlIndex + 1) / 2., false);
+                    soda.set("sonar")->volume(t->mVolume);
+                    tweet->mCanPlay = false;
+                }
                 return tweet->mIndex;
+            } else {
+                tweet->mCanPlay = true;
             }
         }
     }
@@ -206,3 +231,12 @@ void ofApp::mouseExited(int x, int y){}
 void ofApp::windowResized(int w, int h){}
 void ofApp::gotMessage(ofMessage msg){}
 void ofApp::dragEvent(ofDragInfo dragInfo){}
+
+void ofApp::audioReceived(float * input, int bufferSize, int nChannels) {
+    soda.audioReceived(input, bufferSize, nChannels);
+}
+
+void ofApp::audioRequested(float * output, int bufferSize, int nChannels) {
+    soda.audioRequested(output, bufferSize, nChannels);
+}
+

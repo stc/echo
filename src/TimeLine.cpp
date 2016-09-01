@@ -61,6 +61,16 @@ void TimeLine::drawTimeLine(ofVec2f p) {
     ofSetColor(100);
     ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
     
+    ofSetColor(255,244,71,mVolume * 255);
+    ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
+    
+    ofNoFill();
+    ofSetColor(255,244,71,mVolume * 100);
+    ofDrawCircle(mMapPos, 30);
+    ofSetColor(255,244,71,mVolume * 50);
+    ofDrawCircle(mMapPos, 50);
+    ofFill();
+    
     // Important! Works only in 2016 with the following code:
     int tmpDateIndex = cDay;
     int dayIndex = 0;
@@ -71,9 +81,9 @@ void TimeLine::drawTimeLine(ofVec2f p) {
     // check if this is the first timeline
     
     if(tlIndex == 0) {
+        ofSetColor(100);
         mTextFont.draw(monthNames[cMonth-1], 16, 16 + timeLineOffset, ofGetHeight()-120);
         mTextFont.draw(monthNames[cMonth-2], 16, 16 + 150, ofGetHeight()-120);
-        ofSetColor(100);
         ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
         ofDrawLine(16 + 140, ofGetHeight()-100, 16 + 140, ofGetHeight());
         
@@ -143,6 +153,17 @@ int TimeLine::getNumDaysInMonth(int year, int month) {
         days = 31;
     }
     return days;
+}
+
+float TimeLine::getVolume(ofVec2f p) {
+    float d = p.distance(mMapPos);
+    if(d < 100) {
+        mVolume = (100 - d) / 100.;
+    }else {
+        mVolume = 0;
+    }
+    
+    return mVolume;
 }
 
 

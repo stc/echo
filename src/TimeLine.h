@@ -43,5 +43,8 @@ public:
     string monthNames[12] = {
         "January","February","March","April","May","June","July", "August", "September", "October", "November", "December"
     };
+    
+    float mVolume = 0;
+    float getVolume(ofVec2f p);
 
 };

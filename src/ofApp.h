@@ -3,6 +3,7 @@
 #include "TimeLine.h"
 #include "BaseView.h"
 #include "Tweet.h"
+#include "ofxSodaLib.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -29,6 +30,7 @@ class ofApp : public ofBaseApp{
         float playHead = 0;
     
         vector< int > cTweets;
+        vector< float > cVolumes;
     
         bool mOnline;
         ofImage mNetworkError;
@@ -47,4 +49,8 @@ class ofApp : public ofBaseApp{
         int mTunerSwitch = 0;
         vector<int> tunerAverage;
         int tunerAvgCounter = 0;
+    
+        ofxSodaLib soda;
+        void audioReceived(float * input, int bufferSize, int nChannels);
+        void audioRequested(float * input, int bufferSize, int nChannels);
 };
