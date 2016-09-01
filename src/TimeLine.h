@@ -13,7 +13,7 @@ public:
     void parseResults();
     void reset();
     void loadTweets();
-    void drawTimeLine(ofVec2f p);
+    void drawTimeLine(ofVec2f p, ofxFontStash & mTextFont);
     
     bool loading = false;
     bool parsed = false;
@@ -26,7 +26,6 @@ public:
     ThreadedTwitterObject threadedTwitterQuery;
     int mIndex = 0;
     ofVec2f mMapPos;
-    ofxFontStash mTextFont;
     
     int cYear;
     int cMonth;

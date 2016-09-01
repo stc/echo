@@ -1,7 +1,6 @@
 #include "TimeLine.h"
 
 TimeLine::TimeLine(int index, int year, int month, int day) {
-    mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, true, 8, 2.0f);
     cYear = year;
     cMonth = month;
     cDay = day;
@@ -50,7 +49,7 @@ void TimeLine::loadTweets() {
     }
 }
 
-void TimeLine::drawTimeLine(ofVec2f p) {
+void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     mP = p;
     ofSetColor(255,244,71);
     mTextFont.draw(mUserName + " (" + mUserCountry + ")",16, p.x, p.y);

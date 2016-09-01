@@ -5,7 +5,7 @@
 class Tweet {
 public:
     Tweet(int index, string date, string text, ofVec2f mapPos);
-    void drawMapView();
+    void drawMapView(ofxFontStash & mTextFont);
     
     string mText;
     string mDate;
@@ -20,7 +20,7 @@ public:
     int mDay = 0;
     
     
-    ofxFontStash mTextFont;
+    //ofxFontStash mTextFont;
     vector<string> splittedText;
     
     float textAlpha = 0;

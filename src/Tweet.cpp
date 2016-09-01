@@ -25,11 +25,11 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     mMapPos = mapPos;
     mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(300)-150);
     
-    mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, true, 8, 2.0f);
+    //mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     splittedText = ofSplitString(mText, "http");
 }
 
-void Tweet::drawMapView() {
+void Tweet::drawMapView(ofxFontStash & mTextFont) {
     ofPushMatrix();
     ofTranslate(mMapPos);
     ofSetColor(255);

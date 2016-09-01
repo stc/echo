@@ -4,6 +4,7 @@
 #include "BaseView.h"
 #include "Tweet.h"
 #include "ofxSodaLib.h"
+#include "ofxFontStash.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -49,6 +50,8 @@ class ofApp : public ofBaseApp{
         int mTunerSwitch = 0;
         vector<int> tunerAverage;
         int tunerAvgCounter = 0;
+    
+        ofxFontStash mTextFont;
     
         ofxSodaLib soda;
         void audioReceived(float * input, int bufferSize, int nChannels);

@@ -10,14 +10,16 @@ void ofApp::setup(){
     mNetworkError.load("assets/NetworkError.png");
     
     int ticksPerBuffer = 8; // 8 * 64 = buffer len of 512
-    ofSoundStreamSetup(2, 2, this, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
+    ofSoundStreamSetup(2, 0, this, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
 
     soda.init();
     soda.clear();
     soda.createSampler("sonar","sounds/sonar.wav",10);
     soda.createTexture("noise",10);
     soda.save();
-
+    
+    mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
+    
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     cYear  = now->tm_year + 1900;
@@ -94,13 +96,13 @@ void ofApp::draw(){
     baseView.draw();
     for(int i=0; i< timelines.size(); i++) {
         if(timelines[i]->tweets.size()>0) {
-            timelines[i]->tweets[0]->drawMapView();
-            timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
+            timelines[i]->tweets[0]->drawMapView(mTextFont);
+            timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)), mTextFont);
             getSequence(timelines[i]);
             cVolumes[i] = timelines[i]->getVolume(ofVec2f(mTunerPos,timelines[i]->mMapPos.y));
             
             if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) {
-                timelines[i]->tweets[cTweets[i]]->drawMapView();
+                timelines[i]->tweets[cTweets[i]]->drawMapView(mTextFont);
                 
             }
         }
