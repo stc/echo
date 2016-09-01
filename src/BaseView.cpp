@@ -10,4 +10,7 @@ void BaseView::draw() {
     
     ofSetColor(0,180);
     ofDrawRectangle(0,ofGetHeight()-150,ofGetWidth(),150);
+    
+    ofSetColor(150);
+    ofDrawLine(0,ofGetHeight()-150,ofGetWidth(),ofGetHeight()-150);
 }

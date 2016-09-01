@@ -49,30 +49,35 @@ void ofApp::update(){
     }
     #ifdef TARGET_LINUX_ARM
         //  read from file that is updated by python, reading RPI's GPIO values
-        vector < string > linesRot;
-        ofBuffer buffer = ofBufferFromFile(ofToDataPath("python/rot.txt"));
-        for (auto line : buffer.getLines()){
-            linesRot.push_back(line);
-        }
-        if(linesRot.size() > 1) {
-            if(ofToInt(linesRot[1])!=pTunerVal) {
-                mTunerValue = ofToInt(linesRot[0]);
-                pTunerVal = ofToInt(linesRot[1]);
-                mCanMoveTuner = true;
+        try {
+            vector < string > linesRot;
+            ofBuffer buffer = ofBufferFromFile(ofToDataPath("python/rot.txt"));
+            for (auto line : buffer.getLines()){
+                linesRot.push_back(line);
             }
+            if(linesRot.size() > 1) {
+                if(ofToInt(linesRot[1])!=pTunerVal) {
+                    mTunerValue = ofToInt(linesRot[0]);
+                    pTunerVal = ofToInt(linesRot[1]);
+                    mCanMoveTuner = true;
+                }
+            }
+        } catch(...) {
+            // couldn't read from file
         }
     
-        vector < string > linesSwitch;
-        ofBuffer mbuffer = ofBufferFromFile(ofToDataPath("python/switch.txt"));
-        for (auto line : mbuffer.getLines()){
-            linesSwitch.push_back(line);
+        try {
+            vector < string > linesSwitch;
+            ofBuffer mbuffer = ofBufferFromFile(ofToDataPath("python/switch.txt"));
+            for (auto line : mbuffer.getLines()){
+                linesSwitch.push_back(line);
+            }
+            if(linesSwitch.size() > 0) {
+                mTunerSwitch = ofToInt(linesSwitch[0]);
+            }
+        } catch(...) {
+            // couldn't read from file
         }
-        if(linesSwitch.size() > 0) {
-            mTunerSwitch = ofToInt(linesSwitch[0]);
-        }
-    #else
-        // control tuner with keypresses
-        mTunerValue = -1;
     #endif
 }
 
@@ -80,6 +85,7 @@ void ofApp::draw(){
     baseView.draw();
     for(int i=0; i< timelines.size(); i++) {
         if(timelines[i]->tweets.size()>0) {
+            timelines[i]->tweets[0]->drawMapView();
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)));
             getSequence(timelines[i]);
             if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) timelines[i]->tweets[cTweets[i]]->drawMapView();
@@ -114,8 +120,6 @@ void ofApp::drawTuner() {
             if((sum >= 5 || sum <= -5)) {
                 mTunerTarget = mTunerPos + mTunerValue * -30;
             }
-            
-            cout << " sum: " << sum << endl;
         }
         if(mTunerTarget<0) {
             mTunerTarget = ofGetWidth();
@@ -130,12 +134,12 @@ void ofApp::drawTuner() {
     float d = mTunerTarget - mTunerPos;
     mTunerPos += d * mTunerEasing;
     if(mTunerSwitch == 0) {
-        ofSetColor(51,216,255);
+        ofSetColor(255,100);
     } else {
-        ofSetColor(255);
+        ofSetColor(255,30);
     }
-    ofSetLineWidth(4);
-    ofDrawLine(mTunerPos,100,mTunerPos,ofGetHeight()-150);
+    ofSetLineWidth(10);
+    ofDrawLine(mTunerPos,0,mTunerPos,ofGetHeight()-150);
     ofSetLineWidth(1);
 }
 
@@ -175,7 +179,23 @@ int ofApp::getSequence(TimeLine * t) {
     }
 }
 
-void ofApp::keyPressed(int key){}
+void ofApp::keyPressed(int key){
+    // control tuner with keys (for testing)
+    if(key == OF_KEY_RIGHT) {
+        mTunerValue = -1;
+        mCanMoveTuner = true;
+    }
+    if(key == OF_KEY_LEFT) {
+        mTunerValue = 1;
+        mCanMoveTuner = true;
+    }
+    if(key == '0') {
+        mTunerSwitch = 0;
+    }
+    if(key == '1') {
+        mTunerSwitch = 1;
+    }
+}
 void ofApp::keyReleased(int key){}
 void ofApp::mouseMoved(int x, int y ){}
 void ofApp::mouseDragged(int x, int y, int button){}
