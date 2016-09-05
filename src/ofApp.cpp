@@ -14,8 +14,8 @@ void ofApp::setup(){
 
     soda.init();
     soda.clear();
-    soda.createSampler("sonar","sounds/sonar.wav",10);
-    soda.createTexture("noise",10);
+    soda.createSampler("sonar","sounds/bleep.wav",10);
+    //soda.createTexture("noise",10);
     soda.save();
     
     mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
@@ -26,23 +26,35 @@ void ofApp::setup(){
     cMonth = now->tm_mon + 1;
     cDay   =  now->tm_mday;
     
-    for(int i=0; i<5; i++) {
+    for(int i=0; i<7; i++) {
         cTweets.push_back(-1);
-        cVolumes.push_back(0);
         timelines.push_back(new TimeLine(i, cYear, cMonth, cDay));
-        tunerAverage.push_back(0);
     }
+    
+    cNotes.push_back(0.5);
+    cNotes.push_back(0.6);
+    cNotes.push_back(0.75);
+    cNotes.push_back(0.9);
+    cNotes.push_back(1);
+    cNotes.push_back(1.2);
+    cNotes.push_back(1.5);
+    
+    for(int i=0; i<5; i++) tunerAverage.push_back(0);
     
     ofVec2f mapPos = ofVec2f(332,190);
     timelines[0]->getTweetsFromTwitter("congressedits", 200, mapPos, "US");
     mapPos = ofVec2f(649,133);
-    timelines[1]->getTweetsFromTwitter("berlinEDUedits", 200, mapPos, "DE");
-    mapPos = ofVec2f(581,132);
-    timelines[2]->getTweetsFromTwitter("IrishGovEdits", 200, mapPos, "IR");
-    mapPos = ofVec2f(860,205);
-    timelines[3]->getTweetsFromTwitter("PakistanEdits", 200, mapPos, "PK");
-    mapPos = ofVec2f(1124,498);
-    timelines[4]->getTweetsFromTwitter("AussieParlEdits", 200, mapPos, "AUS");
+    timelines[1]->getTweetsFromTwitter("bundesedit", 200, mapPos, "DE");
+    mapPos = ofVec2f(351,500);
+    timelines[2]->getTweetsFromTwitter("BotDetectorCamb", 200, mapPos, "CL");
+    mapPos = ofVec2f(616,140);
+    timelines[3]->getTweetsFromTwitter("euroedit", 200, mapPos, "BE");
+    mapPos = ofVec2f(705,182);
+    timelines[4]->getTweetsFromTwitter("TBMMedits", 200, mapPos, "TUR");
+    mapPos = ofVec2f(180,190);
+    timelines[5]->getTweetsFromTwitter("valleyedits", 200, mapPos, "US");
+    mapPos = ofVec2f(666,152);
+    timelines[6]->getTweetsFromTwitter("_EchoBot", 200, mapPos, "H");
     
     ofBackground(0);
 }
@@ -58,6 +70,7 @@ void ofApp::update(){
             }
         }
     }
+    
     #ifdef TARGET_LINUX_ARM
         //  read from file that is updated by python, reading RPI's GPIO values
         try {
@@ -99,17 +112,15 @@ void ofApp::draw(){
             timelines[i]->tweets[0]->drawMapView(mTextFont);
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)), mTextFont);
             getSequence(timelines[i]);
-            cVolumes[i] = timelines[i]->getVolume(ofVec2f(mTunerPos,timelines[i]->mMapPos.y));
             
             if(cTweets[i]>=0 && cTweets[i] <= timelines[i]->tweets.size()) {
                 timelines[i]->tweets[cTweets[i]]->drawMapView(mTextFont);
-                
             }
         }
     }
-    if(ofGetFrameNum()% int(100 + ofRandom(100)) == 0) soda.set("noise")->shift(ofRandom(90)/100.+0.1,false);
-    auto v = std::max_element(std::begin(cVolumes), std::end(cVolumes));
-    soda.set("noise")->volume(1-*v);
+    //if(ofGetFrameNum()% int(100 + ofRandom(100)) == 0) soda.set("noise")->shift(ofRandom(90)/100.+0.1,false);
+    //auto v = std::max_element(std::begin(cVolumes), std::end(cVolumes));
+    //soda.set("noise")->volume(1-*v);
     
     
     if(!mOnline) {
@@ -119,10 +130,12 @@ void ofApp::draw(){
     
     drawTuner();
     
+    /*
     ofSetColor(255);
     ofDrawBitmapString("fps > " + ofToString(int(ofGetFrameRate())), 20,20);
     ofSetColor(255,0,0);
     ofDrawBitmapString("encoder > " + ofToString(mTunerValue), 20,40);
+    */
 }
 
 void ofApp::drawTuner() {
@@ -141,12 +154,12 @@ void ofApp::drawTuner() {
                 mTunerTarget = mTunerPos + mTunerValue * -30;
             }
         }
-        if(mTunerTarget<0) {
-            mTunerTarget = ofGetWidth();
-            mTunerPos = ofGetWidth();
-        }else if(mTunerTarget > ofGetWidth()) {
-            mTunerTarget = 0;
-            mTunerPos = 0;
+        if(mTunerTarget<timelines[0]->tlMin) {
+            mTunerTarget = timelines[0]->tlMax;
+            mTunerPos = timelines[0]->tlMax;
+        }else if(mTunerTarget > timelines[0]->tlMax) {
+            mTunerTarget = timelines[0]->tlMin;
+            mTunerPos = timelines[0]->tlMin;
         }
         mCanMoveTuner = false;
     }
@@ -159,7 +172,7 @@ void ofApp::drawTuner() {
         ofSetColor(255,30);
     }
     ofSetLineWidth(10);
-    ofDrawLine(mTunerPos,0,mTunerPos,ofGetHeight()-150);
+    ofDrawLine(mTunerPos,ofGetHeight()-160,mTunerPos,ofGetHeight());
     ofSetLineWidth(1);
 }
 
@@ -177,15 +190,19 @@ bool ofApp::checkInternetConnection() {
 
 int ofApp::getSequence(TimeLine * t) {
     if(t->tlIndex == 0) {
-        ofSetColor(255);
-        ofDrawLine(playHead,ofGetHeight()-100,playHead,ofGetHeight());
-        
+        /*
+        // automated playhead
         if(playHead >= t->tlMax) {
             playHead = t->tlMin;
             for(int i=0; i< timelines.size(); i++ ) cTweets[i] = -1;
             for(auto tweet : t->tweets) tweet->textAlpha = 0;
         }
-        playHead+=1;
+        playHead+=0.8;
+        */
+        
+        //manual playhead
+        //playHead = ofMap(mouseX,0,ofGetWidth(),t->tlMin,t->tlMax);
+        playHead = mTunerPos;
     }
 
     for(auto tweet : t->tweets) {
@@ -194,8 +211,8 @@ int ofApp::getSequence(TimeLine * t) {
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
                 if(tweet->mCanPlay) {
-                    soda.set("sonar")->shift((t->tlIndex + 1) / 2., false);
-                    soda.set("sonar")->volume(t->mVolume);
+                    soda.set("sonar")->shift(cNotes[t->tlIndex], false);
+                    soda.set("sonar")->volume(ofRandom(20)/100.0 + 0.8);
                     tweet->mCanPlay = false;
                 }
                 return tweet->mIndex;

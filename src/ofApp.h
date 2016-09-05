@@ -31,7 +31,7 @@ class ofApp : public ofBaseApp{
         float playHead = 0;
     
         vector< int > cTweets;
-        vector< float > cVolumes;
+        vector< float > cNotes;
     
         bool mOnline;
         ofImage mNetworkError;

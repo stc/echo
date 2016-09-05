@@ -33,28 +33,29 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
     ofPushMatrix();
     ofTranslate(mMapPos);
     ofSetColor(255);
-    ofDrawLine(-3,0,3,0);
-    ofDrawLine(0,-3,0,3);
+    ofDrawCircle(0,0,3);
     
     ofTranslate(mTextPos);
     if(textAlpha>0) {
-        ofSetColor(255,100);
+        ofSetColor(255,textAlpha);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
+        ofSetColor(0,textAlpha);
+        ofDrawRectangle(-5,-5,180,100);
         ofTranslate(10,0);
         
-        ofSetColor(255,244,71,255);
+        ofSetColor(255,244,71,textAlpha);
         
         mTextFont.draw(ofToString(mYear) + " / ", 14, 0, 15);
         mTextFont.draw(ofToString(mMonth) + " / ", 14, 40, 15);
         mTextFont.draw(ofToString(mDay), 14, 60, 15);
     
         ofTranslate(0,30);
-        ofSetColor(255);
+        ofSetColor(255,textAlpha);
         int numLines = 0;
         bool wordsWereCropped;
         ofRectangle column;
         column = mTextFont.drawMultiLineColumn(	splittedText[0], 14, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
-        //textAlpha-=0.1;
+        textAlpha-=0.5;
     }
     ofPopMatrix();
 }

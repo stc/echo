@@ -63,15 +63,11 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     ofSetColor(255,244,71,mVolume * 255);
     ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
     
-    ofNoFill();
     ofSetColor(255,244,71,mVolume * 100);
-    ofDrawCircle(mMapPos, 30);
-    ofSetColor(255,244,71,mVolume * 50);
-    ofDrawCircle(mMapPos, 50);
-    ofFill();
+    ofDrawCircle(mMapPos,6);
     
     // Important! Works only in 2016 with the following code:
-    int tmpDateIndex = cDay;
+    //int tmpDateIndex = cDay;
     int dayIndex = 0;
     int monthIndex;
     
@@ -80,30 +76,35 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     // check if this is the first timeline
     
     if(tlIndex == 0) {
+        ofSetColor(255);
+        mTextFont.draw("Twitter Bot Names ", 16, 20, ofGetHeight()-135);
         ofSetColor(100);
-        mTextFont.draw(monthNames[cMonth-1], 16, 16 + timeLineOffset, ofGetHeight()-120);
-        mTextFont.draw(monthNames[cMonth-2], 16, 16 + 150, ofGetHeight()-120);
-        ofDrawLine(16 + timeLineOffset, ofGetHeight()-100, 16 + timeLineOffset, ofGetHeight());
-        ofDrawLine(16 + 140, ofGetHeight()-100, 16 + 140, ofGetHeight());
+        mTextFont.draw(monthNames[cMonth-1], 16, 16 + timeLineOffset, ofGetHeight()-135);
+        mTextFont.draw(monthNames[cMonth-2], 16, 16 + 150, ofGetHeight()-135);
+        ofDrawLine(16 + timeLineOffset, ofGetHeight()-120, 16 + timeLineOffset, ofGetHeight());
+        ofDrawLine(16 + 140, ofGetHeight()-120, 16 + 140, ofGetHeight());
         
         
         // test on RPI if not too heavy
         ofSetColor(80);
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
-            mTextFont.draw(ofToString(i+1), 12, tlMin - 8 + i*16, ofGetHeight()-100);
+            mTextFont.draw(ofToString(i+1), 12, tlMin - 8 + i*16, ofGetHeight()-120);
         }
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth); i++) {
-            mTextFont.draw(ofToString(i+1), 12, 16 + timeLineOffset + i*16, ofGetHeight()-100);
+            mTextFont.draw(ofToString(i+1), 12, 16 + timeLineOffset + i*16, ofGetHeight()-120);
         }
     }
 
     ofSetColor(255,244,71);
     
+    
+    
     for(int i=0; i<200; i++) {
-        if(tmpDateIndex>=1) {
+        
+        //if(tmpDateIndex>=1) {
             dayIndex = cDay -i;
             monthIndex = cMonth;
-            
+        
             if(i<tweets.size()) {
                 if(tweets[i]->mYear == cYear) {
                     if(tweets[i]->mMonth == monthIndex) {
@@ -116,7 +117,10 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
                 }
             }
             
-        }else {
+        //}
+    }
+    for(int i=0; i<200; i++){
+        //if(tmpDateIndex<1) {
             dayIndex = getNumDaysInMonth(cYear, cMonth-1) - i + cDay;
             monthIndex = cMonth-1;
             
@@ -126,15 +130,17 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
                     if(tweets[i]->mMonth == monthIndex) {
                         int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
                         tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                        
+
                         ofSetLineWidth(4);
                         ofDrawLine(x,p.y-2,x,p.y+2);
                         ofSetLineWidth(1);
                     }
                 }
             }
-        }
-        tmpDateIndex--;
+        //}
     }
+    //tmpDateIndex--;
 }
 
 int TimeLine::getNumDaysInMonth(int year, int month) {

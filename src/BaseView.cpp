@@ -9,8 +9,8 @@ void BaseView::draw() {
     mapImg.draw(0,0);
     
     ofSetColor(0,180);
-    ofDrawRectangle(0,ofGetHeight()-150,ofGetWidth(),150);
+    ofDrawRectangle(0,ofGetHeight()-160,ofGetWidth(),160);
     
-    ofSetColor(150);
-    ofDrawLine(0,ofGetHeight()-150,ofGetWidth(),ofGetHeight()-150);
+    ofSetColor(120);
+    ofDrawLine(0,ofGetHeight()-160,ofGetWidth(),ofGetHeight()-160);
 }
