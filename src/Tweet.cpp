@@ -23,34 +23,42 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color)
     
     mRawPos = ofVec2f(20, index * 30);
     mMapPos = mapPos;
-    mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(300)-150);
+    mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(100)-50);
+    //mTextPos = mTextOriginPos;
+    mDirection = -mTextPos;
     mColor = color;
     
-    //mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     splittedText = ofSplitString(mText, "http");
 }
-
-void Tweet::drawMapView(ofxFontStash & mTextFont) {
+void Tweet::drawOriginOnMap() {
     ofPushMatrix();
     ofTranslate(mMapPos);
     ofSetColor(mColor);
     ofSetLineWidth(6);
     ofDrawLine(0,-3,0,3);
     ofSetLineWidth(1);
+    ofPopMatrix();
+}
 
+void Tweet::drawMapView(ofxFontStash & mTextFont) {
+    ofPushMatrix();
+    ofTranslate(mMapPos);
     ofTranslate(mTextPos);
     if(textAlpha>0) {
+        mTextPos += mDirection*0.001;
         ofSetColor(mColor,textAlpha);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
         ofSetColor(mColor,textAlpha);
-        ofDrawRectangle(-5,-5,180,100);
+        ofDrawRectangle(-5,15,180,85);
+        ofSetColor(0,textAlpha * 0.2);
+        ofDrawTriangle(175,70,175,100,145,100);
         ofTranslate(10,0);
         
         ofSetColor(255,textAlpha);
         
-        mTextFont.draw(ofToString(mYear) + " / ", 16, 0, 15);
-        mTextFont.draw(ofToString(mMonth) + " / ", 16, 40, 15);
-        mTextFont.draw(ofToString(mDay), 16, 60, 15);
+        mTextFont.draw(ofToString(mYear) + " / ", 16, 0, 10);
+        mTextFont.draw(ofToString(mMonth) + " / ", 16, 40, 10);
+        mTextFont.draw(ofToString(mDay), 16, 60, 10);
     
         ofTranslate(0,30);
         ofSetColor(0,textAlpha);
@@ -59,6 +67,8 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
         ofRectangle column;
         column = mTextFont.drawMultiLineColumn(	splittedText[0], 16, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
         textAlpha-=0.5;
+    } else {
+        mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(100)-50);
     }
     ofPopMatrix();
 }

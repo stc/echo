@@ -109,7 +109,11 @@ void ofApp::draw(){
     baseView.draw();
     for(int i=0; i< timelines.size(); i++) {
         if(timelines[i]->tweets.size()>0) {
-            timelines[i]->tweets[0]->drawMapView(mTextFont);
+            timelines[i]->tweets[0]->drawOriginOnMap();
+        }
+    }
+    for(int i=0; i< timelines.size(); i++) {
+        if(timelines[i]->tweets.size()>0) {
             timelines[i]->drawTimeLine(ofVec2f(20,ofGetHeight()-20 - (i*15)), mTextFont);
             getSequence(timelines[i]);
             
@@ -163,13 +167,15 @@ void ofApp::drawTuner() {
     float d = mTunerTarget - mTunerPos;
     mTunerPos += d * mTunerEasing;
     if(mTunerSwitch == 0) {
-        ofSetColor(255,100);
+        ofSetColor(255,100 + mTriggerAlpha);
     } else {
         ofSetColor(255,30);
     }
     ofSetLineWidth(10);
     ofDrawLine(mTunerPos,ofGetHeight()-160,mTunerPos,ofGetHeight());
     ofSetLineWidth(1);
+    
+    if(mTriggerAlpha > 0) mTriggerAlpha -= 8;
 }
 
 bool ofApp::checkInternetConnection() {
@@ -186,18 +192,6 @@ bool ofApp::checkInternetConnection() {
 
 int ofApp::getSequence(TimeLine * t) {
     if(t->tlIndex == 0) {
-        /*
-        // automated playhead
-        if(playHead >= t->tlMax) {
-            playHead = t->tlMin;
-            for(int i=0; i< timelines.size(); i++ ) cTweets[i] = -1;
-            for(auto tweet : t->tweets) tweet->textAlpha = 0;
-        }
-        playHead+=0.8;
-        */
-        
-        //manual playhead
-        //playHead = ofMap(mouseX,0,ofGetWidth(),t->tlMin,t->tlMax);
         playHead = mTunerPos;
     }
 
@@ -210,6 +204,7 @@ int ofApp::getSequence(TimeLine * t) {
                     soda.set("sonar")->shift(cNotes[t->tlIndex], false);
                     soda.set("sonar")->volume(ofRandom(20)/100.0 + 0.8);
                     tweet->mCanPlay = false;
+                    mTriggerAlpha = 150;
                 }
                 return tweet->mIndex;
             } else {

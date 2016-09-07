@@ -1,7 +1,7 @@
 #include "BaseView.h"
 
 BaseView::BaseView() {
-    mapImg.load("assets/WorldMap.jpg");
+    mapImg.load("assets/WorldMapBlack.jpg");
 }
 
 void BaseView::draw() {
@@ -11,6 +11,6 @@ void BaseView::draw() {
     ofSetColor(0,180);
     ofDrawRectangle(0,ofGetHeight()-160,ofGetWidth(),160);
     
-    ofSetColor(120);
+    ofSetColor(0);
     ofDrawLine(0,ofGetHeight()-160,ofGetWidth(),ofGetHeight()-160);
 }

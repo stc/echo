@@ -50,6 +50,7 @@ class ofApp : public ofBaseApp{
         int mTunerSwitch = 0;
         vector<int> tunerAverage;
         int tunerAvgCounter = 0;
+        int mTriggerAlpha = 0;
     
         ofxFontStash mTextFont;
     

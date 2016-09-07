@@ -70,14 +70,11 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
     
     // Important! Works only in 2016 with the following code:
-    //int tmpDateIndex = cDay;
     int dayIndex = 0;
     int monthIndex;
-    
     int timeLineOffset = ofGetWidth() / 2;
     
     // check if this is the first timeline
-    
     if(tlIndex == 0) {
         ofSetColor(255);
         mTextFont.draw("Twitter Bot Names ", 16, 20, ofGetHeight()-135);
@@ -87,8 +84,6 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
         ofDrawLine(16 + timeLineOffset, ofGetHeight()-120, 16 + timeLineOffset, ofGetHeight());
         ofDrawLine(16 + 140, ofGetHeight()-120, 16 + 140, ofGetHeight());
         
-        
-        // test on RPI if not too heavy
         ofSetColor(80);
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
             mTextFont.draw(ofToString(i+1), 12, tlMin - 8 + i*16, ofGetHeight()-120);
@@ -99,9 +94,6 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     }
 
     ofSetColor(mColor);
-    
-    
-    
     for(int i=0; i<200; i++) {
         dayIndex = cDay -i;
         monthIndex = cMonth;
