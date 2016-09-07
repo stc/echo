@@ -1,6 +1,6 @@
 #include "Tweet.h"
 
-Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
+Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color) {
     mDate = date;
     mText = text;
     mIndex = index;
@@ -24,6 +24,7 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
     mRawPos = ofVec2f(20, index * 30);
     mMapPos = mapPos;
     mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(300)-150);
+    mColor = color;
     
     //mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     splittedText = ofSplitString(mText, "http");
@@ -32,29 +33,31 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos) {
 void Tweet::drawMapView(ofxFontStash & mTextFont) {
     ofPushMatrix();
     ofTranslate(mMapPos);
-    ofSetColor(255);
-    ofDrawCircle(0,0,3);
-    
+    ofSetColor(mColor);
+    ofSetLineWidth(6);
+    ofDrawLine(0,-3,0,3);
+    ofSetLineWidth(1);
+
     ofTranslate(mTextPos);
     if(textAlpha>0) {
-        ofSetColor(255,textAlpha);
+        ofSetColor(mColor,textAlpha);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
-        ofSetColor(0,textAlpha);
+        ofSetColor(mColor,textAlpha);
         ofDrawRectangle(-5,-5,180,100);
         ofTranslate(10,0);
         
-        ofSetColor(255,244,71,textAlpha);
+        ofSetColor(255,textAlpha);
         
-        mTextFont.draw(ofToString(mYear) + " / ", 14, 0, 15);
-        mTextFont.draw(ofToString(mMonth) + " / ", 14, 40, 15);
-        mTextFont.draw(ofToString(mDay), 14, 60, 15);
+        mTextFont.draw(ofToString(mYear) + " / ", 16, 0, 15);
+        mTextFont.draw(ofToString(mMonth) + " / ", 16, 40, 15);
+        mTextFont.draw(ofToString(mDay), 16, 60, 15);
     
         ofTranslate(0,30);
-        ofSetColor(255,textAlpha);
+        ofSetColor(0,textAlpha);
         int numLines = 0;
         bool wordsWereCropped;
         ofRectangle column;
-        column = mTextFont.drawMultiLineColumn(	splittedText[0], 14, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
+        column = mTextFont.drawMultiLineColumn(	splittedText[0], 16, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
         textAlpha-=0.5;
     }
     ofPopMatrix();

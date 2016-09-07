@@ -4,7 +4,7 @@
 
 class Tweet {
 public:
-    Tweet(int index, string date, string text, ofVec2f mapPos);
+    Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color);
     void drawMapView(ofxFontStash & mTextFont);
     
     string mText;
@@ -15,12 +15,12 @@ public:
     ofVec2f mTimeLinePos;
     ofVec2f mTextPos;
     
+    ofColor mColor;
+    
     int mMonth = 0;
     int mYear = 0;
     int mDay = 0;
     
-    
-    //ofxFontStash mTextFont;
     vector<string> splittedText;
     
     float textAlpha = 0;

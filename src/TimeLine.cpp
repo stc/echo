@@ -6,6 +6,15 @@ TimeLine::TimeLine(int index, int year, int month, int day) {
     cDay = day;
     
     tlIndex = index;
+    
+    colorPalette.push_back(ofColor(254, 237, 181));
+    colorPalette.push_back(ofColor(254, 202, 161));
+    colorPalette.push_back(ofColor(253, 141, 139));
+    colorPalette.push_back(ofColor(117, 102, 132));
+    colorPalette.push_back(ofColor(30,  167, 179));
+    colorPalette.push_back(ofColor(75,  216, 156));
+    colorPalette.push_back(ofColor(147, 248, 138));
+    mColor = colorPalette[tlIndex];
 }
 
 void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry) {
@@ -39,7 +48,7 @@ void TimeLine::parseResults() {
 void TimeLine::loadTweets() {
     string date = result[mIndex]["created_at"].asString();
     string txt = result[mIndex]["text"].asString();
-    tweets.push_back(new Tweet(mIndex, date, txt, mMapPos));
+    tweets.push_back(new Tweet(mIndex, date, txt, mMapPos, mColor));
     mIndex++;
     
     if(mIndex == result.size()) {
@@ -51,7 +60,7 @@ void TimeLine::loadTweets() {
 
 void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     mP = p;
-    ofSetColor(255,244,71);
+    ofSetColor(mColor);
     mTextFont.draw(mUserName + " (" + mUserCountry + ")",16, p.x, p.y);
     
     tlMin = 16 + 150;
@@ -59,12 +68,6 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
 
     ofSetColor(100);
     ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
-    
-    ofSetColor(255,244,71,mVolume * 255);
-    ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
-    
-    ofSetColor(255,244,71,mVolume * 100);
-    ofDrawCircle(mMapPos,6);
     
     // Important! Works only in 2016 with the following code:
     //int tmpDateIndex = cDay;
@@ -95,52 +98,43 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
         }
     }
 
-    ofSetColor(255,244,71);
+    ofSetColor(mColor);
     
     
     
     for(int i=0; i<200; i++) {
+        dayIndex = cDay -i;
+        monthIndex = cMonth;
         
-        //if(tmpDateIndex>=1) {
-            dayIndex = cDay -i;
-            monthIndex = cMonth;
-        
-            if(i<tweets.size()) {
-                if(tweets[i]->mYear == cYear) {
-                    if(tweets[i]->mMonth == monthIndex) {
-                        int x = tweets[i]->mDay * 16 + timeLineOffset;
-                        tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
-                        ofSetLineWidth(4);
-                        ofDrawLine(x,p.y-2,x,p.y+2);
-                        ofSetLineWidth(1);
-                    }
+        if(i<tweets.size()) {
+            if(tweets[i]->mYear == cYear) {
+                if(tweets[i]->mMonth == monthIndex) {
+                    int x = tweets[i]->mDay * 16 + timeLineOffset;
+                    tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                    ofSetLineWidth(6);
+                    ofDrawLine(x,p.y-3,x,p.y+3);
+                    ofSetLineWidth(1);
                 }
             }
-            
-        //}
+        }
     }
     for(int i=0; i<200; i++){
-        //if(tmpDateIndex<1) {
-            dayIndex = getNumDaysInMonth(cYear, cMonth-1) - i + cDay;
-            monthIndex = cMonth-1;
-            
-            if(i<tweets.size()) {
-                
-                if(tweets[i]->mYear == cYear) {
-                    if(tweets[i]->mMonth == monthIndex) {
-                        int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
-                        tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
-                        
-
-                        ofSetLineWidth(4);
-                        ofDrawLine(x,p.y-2,x,p.y+2);
-                        ofSetLineWidth(1);
-                    }
+        dayIndex = getNumDaysInMonth(cYear, cMonth-1) - i + cDay;
+        monthIndex = cMonth-1;
+        
+        if(i<tweets.size()) {
+            if(tweets[i]->mYear == cYear) {
+                if(tweets[i]->mMonth == monthIndex) {
+                    int x = ((tweets[i]->mDay-getNumDaysInMonth(cYear, cMonth-1)) * 16 + timeLineOffset);
+                    tweets[i]->mTimeLinePos = ofVec2f(x,p.y);
+                    
+                    ofSetLineWidth(6);
+                    ofDrawLine(x,p.y-3,x,p.y+3);
+                    ofSetLineWidth(1);
                 }
             }
-        //}
+        }
     }
-    //tmpDateIndex--;
 }
 
 int TimeLine::getNumDaysInMonth(int year, int month) {

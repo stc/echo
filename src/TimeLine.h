@@ -45,5 +45,8 @@ public:
     
     float mVolume = 0;
     float getVolume(ofVec2f p);
+    
+    vector< ofColor > colorPalette;
+    ofColor mColor;
 
 };

@@ -118,10 +118,6 @@ void ofApp::draw(){
             }
         }
     }
-    //if(ofGetFrameNum()% int(100 + ofRandom(100)) == 0) soda.set("noise")->shift(ofRandom(90)/100.+0.1,false);
-    //auto v = std::max_element(std::begin(cVolumes), std::end(cVolumes));
-    //soda.set("noise")->volume(1-*v);
-    
     
     if(!mOnline) {
         ofSetColor(255);
