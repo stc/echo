@@ -16,6 +16,10 @@ void ofApp::setup(){
     soda.clear();
     soda.createSampler("s","sounds/bleep.wav",10);
     soda.save();
+    
+    soda.pd.openPatch("lib/bg.pd");
+    soda.pd.sendFloat("vol", mOutputVolume);
+    
     mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     
     time_t t = time(0);   // get time now
@@ -131,7 +135,7 @@ void ofApp::draw(){
     if(mRotateAlpha<255) mRotateAlpha += 0.1;
     
     ofSetColor(255,mRotateAlpha * 0.5);
-    mTextFont.draw("ROTATE TO LISTEN TWEETS >>> ", 30, ofGetWidth()-400, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
+    if(mPlayMode) mTextFont.draw("ROTATE TO LISTEN TWEETS >>> ", 30, ofGetWidth()-400, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
     
     /*
     ofSetColor(255);
@@ -194,6 +198,12 @@ void ofApp::drawProcessTuner() {
         ofSetColor(255);
         mTextFont.draw("Volume >>> " + ofToString(vol),40, 80, 80);
         mOutputVolume = vol;
+        soda.pd.sendFloat("vol", vol);
+        
+        mTextFont.draw("Echo: A listening machine for tracking governmental wikipedia edits",30, 80, 200);
+        mTextFont.draw("@_EchoBot: A Twitter bot (tracking edits from the Hungarian Government)",30, 80, 240);
+        mTextFont.draw("Binaura: makers of what you see now",30, 80, 280);
+        mTextFont.draw("Freedom: a state of mind",30, 80, 320);
     }
 }
 
