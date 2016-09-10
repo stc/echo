@@ -14,10 +14,8 @@ void ofApp::setup(){
 
     soda.init();
     soda.clear();
-    soda.createSampler("sonar","sounds/bleep.wav",10);
-    //soda.createTexture("noise",10);
+    soda.createSampler("s","sounds/bleep.wav",10);
     soda.save();
-    
     mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     
     time_t t = time(0);   // get time now
@@ -51,8 +49,8 @@ void ofApp::setup(){
     timelines[3]->getTweetsFromTwitter("euroedit", 200, mapPos, "BE");
     mapPos = ofVec2f(705,182);
     timelines[4]->getTweetsFromTwitter("TBMMedits", 200, mapPos, "TUR");
-    mapPos = ofVec2f(180,190);
-    timelines[5]->getTweetsFromTwitter("valleyedits", 200, mapPos, "US");
+    mapPos = ofVec2f(170,140);
+    timelines[5]->getTweetsFromTwitter("gccaedits", 200, mapPos, "CAN");
     mapPos = ofVec2f(666,152);
     timelines[6]->getTweetsFromTwitter("_EchoBot", 200, mapPos, "H");
     
@@ -128,7 +126,12 @@ void ofApp::draw(){
         mNetworkError.draw(ofGetWidth()/2-mNetworkError.getWidth()/2, ofGetHeight()/2-mNetworkError.getHeight()/2);
     }
     
-    drawTuner();
+    drawProcessTuner();
+    
+    if(mRotateAlpha<255) mRotateAlpha += 0.1;
+    
+    ofSetColor(255,mRotateAlpha * 0.5);
+    mTextFont.draw("ROTATE TO LISTEN TWEETS >>> ", 30, ofGetWidth()-400, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
     
     /*
     ofSetColor(255);
@@ -138,7 +141,7 @@ void ofApp::draw(){
     */
 }
 
-void ofApp::drawTuner() {
+void ofApp::drawProcessTuner() {
     if(mCanMoveTuner) {
         //  avoid extreme values from sensor
         if(mTunerValue > -2 && mTunerValue < 2) {
@@ -146,6 +149,7 @@ void ofApp::drawTuner() {
             tunerAvgCounter++;
             if(tunerAvgCounter>4) tunerAvgCounter = 0;
             tunerAverage[tunerAvgCounter] = mTunerValue;
+            mRotateAlpha = 0;
             float sum = 0;
             for(int i=0;i<tunerAverage.size(); i++) {
                 sum += tunerAverage[i];
@@ -154,6 +158,7 @@ void ofApp::drawTuner() {
                 mTunerTarget = mTunerPos + mTunerValue * -30;
             }
         }
+        
         if(mTunerTarget<timelines[0]->tlMin) {
             mTunerTarget = timelines[0]->tlMax;
             mTunerPos = timelines[0]->tlMax;
@@ -166,16 +171,30 @@ void ofApp::drawTuner() {
     
     float d = mTunerTarget - mTunerPos;
     mTunerPos += d * mTunerEasing;
+    
+    // drawing
     if(mTunerSwitch == 0) {
+        mPlayMode = true;
         ofSetColor(255,100 + mTriggerAlpha);
     } else {
+        mPlayMode = false;
         ofSetColor(255,30);
     }
-    ofSetLineWidth(10);
-    ofDrawLine(mTunerPos,ofGetHeight()-160,mTunerPos,ofGetHeight());
-    ofSetLineWidth(1);
     
     if(mTriggerAlpha > 0) mTriggerAlpha -= 8;
+    
+    if(mPlayMode) {
+        ofSetLineWidth(10);
+        ofDrawLine(mTunerPos,ofGetHeight()-160,mTunerPos,ofGetHeight());
+        ofSetLineWidth(1);
+    } else {
+        ofSetColor(0,100);
+        ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+        float vol = ofMap(mTunerTarget, timelines[0]->tlMin, timelines[0]->tlMax, 0, 1);
+        ofSetColor(255);
+        mTextFont.draw("Volume >>> " + ofToString(vol),40, 80, 80);
+        mOutputVolume = vol;
+    }
 }
 
 bool ofApp::checkInternetConnection() {
@@ -192,7 +211,7 @@ bool ofApp::checkInternetConnection() {
 
 int ofApp::getSequence(TimeLine * t) {
     if(t->tlIndex == 0) {
-        playHead = mTunerPos;
+        if(mPlayMode) playHead = mTunerPos;
     }
 
     for(auto tweet : t->tweets) {
@@ -201,8 +220,8 @@ int ofApp::getSequence(TimeLine * t) {
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
                 if(tweet->mCanPlay) {
-                    soda.set("sonar")->shift(cNotes[t->tlIndex], false);
-                    soda.set("sonar")->volume(ofRandom(20)/100.0 + 0.8);
+                    soda.set("s")->shift(cNotes[t->tlIndex], false);
+                    soda.set("s")->volume(mOutputVolume);
                     tweet->mCanPlay = false;
                     mTriggerAlpha = 150;
                 }

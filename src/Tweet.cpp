@@ -23,7 +23,7 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color)
     
     mRawPos = ofVec2f(20, index * 30);
     mMapPos = mapPos;
-    mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(100)-50);
+    mTextPos = ofVec2f(ofRandom(400)-200, ofRandom(100)-50);
     //mTextPos = mTextOriginPos;
     mDirection = -mTextPos;
     mColor = color;
@@ -48,10 +48,10 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
         mTextPos += mDirection*0.001;
         ofSetColor(mColor,textAlpha);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
-        ofSetColor(mColor,textAlpha);
+        ofSetColor(0,textAlpha*0.3);
         ofDrawRectangle(-5,15,180,85);
         ofSetColor(0,textAlpha * 0.2);
-        ofDrawTriangle(175,70,175,100,145,100);
+        //ofDrawTriangle(175,70,175,100,145,100);
         ofTranslate(10,0);
         
         ofSetColor(255,textAlpha);
@@ -61,14 +61,14 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
         mTextFont.draw(ofToString(mDay), 16, 60, 10);
     
         ofTranslate(0,30);
-        ofSetColor(0,textAlpha);
+        ofSetColor(mColor,textAlpha);
         int numLines = 0;
         bool wordsWereCropped;
         ofRectangle column;
         column = mTextFont.drawMultiLineColumn(	splittedText[0], 16, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
         textAlpha-=0.5;
     } else {
-        mTextPos = ofVec2f(ofRandom(200)-100, ofRandom(100)-50);
+        mTextPos = ofVec2f(ofRandom(400)-200, ofRandom(100)-50);
     }
     ofPopMatrix();
 }

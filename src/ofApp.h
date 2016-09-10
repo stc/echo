@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
     
         int getSequence(TimeLine * t);
         float playHead = 0;
+        bool mPlayMode = true;
     
         vector< int > cTweets;
         vector< float > cNotes;
@@ -45,12 +46,15 @@ class ofApp : public ofBaseApp{
         float mTunerPos;
         float mTunerEasing = 0.05;
         int pTunerVal;
-        void drawTuner();
+        void drawProcessTuner();
         bool mCanMoveTuner = false;
         int mTunerSwitch = 0;
         vector<int> tunerAverage;
         int tunerAvgCounter = 0;
         int mTriggerAlpha = 0;
+    
+        float mOutputVolume = 0.1;
+        float mRotateAlpha = 255;
     
         ofxFontStash mTextFont;
     

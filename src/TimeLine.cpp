@@ -78,13 +78,17 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     if(tlIndex == 0) {
         ofSetColor(255);
         mTextFont.draw("Twitter Bot Names ", 16, 20, ofGetHeight()-135);
-        ofSetColor(100);
+        ofSetColor(200);
         mTextFont.draw(monthNames[cMonth-1], 16, 16 + timeLineOffset, ofGetHeight()-135);
         mTextFont.draw(monthNames[cMonth-2], 16, 16 + 150, ofGetHeight()-135);
+        ofSetColor(150);
+        mTextFont.draw("// " + ofToString(cYear), 16, ofGetWidth()-80, ofGetHeight()-135);
+        ofSetColor(100);
+        ofDrawLine(ofGetWidth()-60,ofGetHeight()-120, ofGetWidth()-60, ofGetHeight()-20);
         ofDrawLine(16 + timeLineOffset, ofGetHeight()-120, 16 + timeLineOffset, ofGetHeight());
         ofDrawLine(16 + 140, ofGetHeight()-120, 16 + 140, ofGetHeight());
         
-        ofSetColor(80);
+        ofSetColor(160);
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
             mTextFont.draw(ofToString(i+1), 12, tlMin - 8 + i*16, ofGetHeight()-120);
         }
