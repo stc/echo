@@ -18,7 +18,7 @@ void ofApp::setup(){
     soda.save();
     
     soda.pd.openPatch("lib/bg.pd");
-    soda.pd.sendFloat("vol", mOutputVolume);
+    //soda.pd.sendFloat("vol", mOutputVolume * 2);
     
     mTextFont.setup("fonts/DINBold.ttf", 1.0, 1024, false, 8, 2.0f);
     
@@ -59,6 +59,10 @@ void ofApp::setup(){
     timelines[6]->getTweetsFromTwitter("_EchoBot", 200, mapPos, "H");
     
     ofBackground(0);
+    ofHideCursor();
+    
+    mTunerSwitchTime = ofGetElapsedTimeMillis();
+    mTunerRotateTime = ofGetElapsedTimeMillis();
 }
 
 void ofApp::update(){
@@ -100,6 +104,20 @@ void ofApp::update(){
             }
             if(linesSwitch.size() > 0) {
                 mTunerSwitch = ofToInt(linesSwitch[0]);
+                if(mTunerSwitch != pmTunerSwitch) {
+                    int elapsed = ofGetElapsedTimeMillis() - mTunerSwitchTime;
+                    if(elapsed < 500) {
+                        mTunerSwitchCounter++;
+                        if(mTunerSwitchCounter == 20) {
+                            cout << "turn off system" << endl;
+                            system("sudo shutdown -h now");
+                        }
+                    } else {
+                        mTunerSwitchCounter = 0;
+                    }
+                    mTunerSwitchTime = ofGetElapsedTimeMillis();
+                }
+                pmTunerSwitch = mTunerSwitch;
             }
         } catch(...) {
             // couldn't read from file
@@ -134,15 +152,46 @@ void ofApp::draw(){
     
     if(mRotateAlpha<255) mRotateAlpha += 0.1;
     
-    ofSetColor(255,mRotateAlpha * 0.5);
-    if(mPlayMode) mTextFont.draw("ROTATE TO LISTEN TWEETS >>> ", 30, ofGetWidth()-400, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
+    ofSetColor(255,mRotateAlpha);
+    if(mPlayMode) {
+        mTextFont.draw("ROTATE KNOB TO LISTEN TO TWEETS >>> ", 30, ofGetWidth()-500, ofGetHeight()/2-45 + sin(ofGetFrameNum()* 0.01) * 15);
+        mTextFont.draw("FORGASD A TEKERŐT HOGY HALLD A TWEET-EKET", 30, ofGetWidth()-650, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
+    }
     
-    /*
+    ofSetColor(0);
+    ofDrawRectangle(0,0,ofGetWidth(), 30);
     ofSetColor(255);
-    ofDrawBitmapString("fps > " + ofToString(int(ofGetFrameRate())), 20,20);
-    ofSetColor(255,0,0);
-    ofDrawBitmapString("encoder > " + ofToString(mTunerValue), 20,40);
-    */
+    mTextFont.draw("Recent Edits (Hungarian Gov) : ", 16, 10, 20);
+    if(timelines.size()>0) {
+        ofSetColor(timelines[timelines.size()-1]->mColor);
+        int offset = 0;
+        for(int i=0; i<timelines[timelines.size()-1]->tweets.size(); i++) {
+            if(i<15) {
+                string tmpTxt = " " + ofSplitString(timelines[timelines.size()-1]->tweets[i]->mText, "Wikipedia")[0] + " /";
+                if(i == 0) {
+                    mTextFont.draw(tmpTxt, 16, 200 + offset, 20);
+                }else if(i>0) {
+                    string pTmpTxt = " " + ofSplitString(timelines[timelines.size()-1]->tweets[i-1]->mText, "Wikipedia")[0] + " /";
+                    if(tmpTxt!=pTmpTxt) {
+                        offset += mTextFont.getBBox(pTmpTxt, 16, 0, 0).width;
+                        mTextFont.draw(tmpTxt, 16, 200 + offset, 20);
+                    }
+                }
+                
+            }
+        }
+    }
+
+    if(infoAlpha>0) {
+        infoAlpha-=2;
+        ofSetColor(0,infoAlpha*0.8);
+        ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
+        ofSetColor(255,infoAlpha);
+        mTextFont.draw("Echo: A listening machine for tracking governmental wikipedia edits",30, 80, 200);
+        mTextFont.draw("@_EchoBot: A Twitter bot (tracking edits from the Hungarian Government)",30, 80, 240);
+        mTextFont.draw("Binaura: makers of what you see now",30, 80, 280);
+        mTextFont.draw("Freedom: a state of mind",30, 80, 320);
+    }
 }
 
 void ofApp::drawProcessTuner() {
@@ -159,7 +208,14 @@ void ofApp::drawProcessTuner() {
                 sum += tunerAverage[i];
             }
             if((sum >= 5 || sum <= -5)) {
-                mTunerTarget = mTunerPos + mTunerValue * -30;
+                int elapsed = ofGetElapsedTimeMillis() - mTunerRotateTime;
+                if(elapsed < 2000) {
+                    mTunerRotateCounter++;
+                } else {
+                    mTunerRotateCounter = 0;
+                }
+                mTunerRotateTime = ofGetElapsedTimeMillis();
+                mTunerTarget = mTunerPos + mTunerValue * -(mTunerRotateCounter+1)*2;
             }
         }
         
@@ -192,18 +248,7 @@ void ofApp::drawProcessTuner() {
         ofDrawLine(mTunerPos,ofGetHeight()-160,mTunerPos,ofGetHeight());
         ofSetLineWidth(1);
     } else {
-        ofSetColor(0,100);
-        ofDrawRectangle(0,0,ofGetWidth(), ofGetHeight());
-        float vol = ofMap(mTunerTarget, timelines[0]->tlMin, timelines[0]->tlMax, 0, 1);
-        ofSetColor(255);
-        mTextFont.draw("Volume >>> " + ofToString(vol),40, 80, 80);
-        mOutputVolume = vol;
-        soda.pd.sendFloat("vol", vol);
-        
-        mTextFont.draw("Echo: A listening machine for tracking governmental wikipedia edits",30, 80, 200);
-        mTextFont.draw("@_EchoBot: A Twitter bot (tracking edits from the Hungarian Government)",30, 80, 240);
-        mTextFont.draw("Binaura: makers of what you see now",30, 80, 280);
-        mTextFont.draw("Freedom: a state of mind",30, 80, 320);
+        infoAlpha = 255;
     }
 }
 
@@ -258,6 +303,17 @@ void ofApp::keyPressed(int key){
     }
     if(key == '1') {
         mTunerSwitch = 1;
+        int elapsed = ofGetElapsedTimeMillis() - mTunerSwitchTime;
+        if(elapsed < 500) {
+            mTunerSwitchCounter++;
+            if(mTunerSwitchCounter == 6) {
+                cout << "turn off system" << endl;
+                //system("sudo shutdown -h now");
+            }
+        } else {
+            mTunerSwitchCounter = 0;
+        }
+        mTunerSwitchTime = ofGetElapsedTimeMillis();
     }
 }
 void ofApp::keyReleased(int key){}

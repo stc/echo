@@ -15,6 +15,15 @@ TimeLine::TimeLine(int index, int year, int month, int day) {
     colorPalette.push_back(ofColor(75,  216, 156));
     colorPalette.push_back(ofColor(147, 248, 138));
     mColor = colorPalette[tlIndex];
+    
+    areas.push_back(ofRectangle(-100,0,100,100));
+    areas.push_back(ofRectangle(0,-100,100,50));
+    areas.push_back(ofRectangle(-100,-100,200,100));
+    areas.push_back(ofRectangle(-200,0,100,50));
+    areas.push_back(ofRectangle(-100,150,200,100));
+    areas.push_back(ofRectangle(-50,-100,100,100));
+    areas.push_back(ofRectangle(0,0,100,100));
+    mArea = areas[tlIndex];
 }
 
 void TimeLine::getTweetsFromTwitter(string username, int limit, ofVec2f mapPos, string userCountry) {
@@ -48,7 +57,7 @@ void TimeLine::parseResults() {
 void TimeLine::loadTweets() {
     string date = result[mIndex]["created_at"].asString();
     string txt = result[mIndex]["text"].asString();
-    tweets.push_back(new Tweet(mIndex, date, txt, mMapPos, mColor));
+    tweets.push_back(new Tweet(mIndex, date, txt, mMapPos, mColor, mArea));
     mIndex++;
     
     if(mIndex == result.size()) {
@@ -67,6 +76,7 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
     tlMax = tlMax = ofGetWidth()-100;
 
     ofSetColor(100);
+    ofSetLineWidth(2);
     ofDrawLine(tlMin - 10, p.y, tlMax,p.y);
     
     // Important! Works only in 2016 with the following code:
@@ -84,16 +94,17 @@ void TimeLine::drawTimeLine(ofVec2f p, ofxFontStash & mTextFont) {
         ofSetColor(150);
         mTextFont.draw("// " + ofToString(cYear), 16, ofGetWidth()-80, ofGetHeight()-135);
         ofSetColor(100);
+        ofSetLineWidth(2);
         ofDrawLine(ofGetWidth()-60,ofGetHeight()-120, ofGetWidth()-60, ofGetHeight()-20);
-        ofDrawLine(16 + timeLineOffset, ofGetHeight()-120, 16 + timeLineOffset, ofGetHeight());
+        //ofDrawLine(16 + timeLineOffset, ofGetHeight()-120, 16 + timeLineOffset, ofGetHeight());
         ofDrawLine(16 + 140, ofGetHeight()-120, 16 + 140, ofGetHeight());
         
         ofSetColor(160);
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth-1); i++) {
-            mTextFont.draw(ofToString(i+1), 12, tlMin - 8 + i*16, ofGetHeight()-120);
+            mTextFont.draw(ofToString(i+1), 13, tlMin - 8 + i*16, ofGetHeight()-120);
         }
         for(int i=0; i< getNumDaysInMonth(cYear, cMonth); i++) {
-            mTextFont.draw(ofToString(i+1), 12, 16 + timeLineOffset + i*16, ofGetHeight()-120);
+            mTextFont.draw(ofToString(i+1), 13, 16 + timeLineOffset + i*16, ofGetHeight()-120);
         }
     }
 

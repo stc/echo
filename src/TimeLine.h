@@ -48,5 +48,7 @@ public:
     
     vector< ofColor > colorPalette;
     ofColor mColor;
+    ofRectangle mArea;
+    vector < ofRectangle > areas;
 
 };

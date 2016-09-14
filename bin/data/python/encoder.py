@@ -25,7 +25,7 @@ while True:
         if counter > 100:
             counter = 0
 
-        text_file = open("rot.txt", "w")
+        text_file = open("openFrameworks/apps/myApps/echo/bin/data/python/rot.txt", "w")
         text_file.write("%s\n" % delta)
         text_file.write("%s" % counter)
         text_file.close()
@@ -35,6 +35,6 @@ while True:
     if sw_state != last_state:
         print "switch %d" % sw_state
         last_state = sw_state
-        text_file = open("switch.txt", "w")
+        text_file = open("openFrameworks/apps/myApps/echo/bin/data/python/switch.txt", "w")
         text_file.write("%s" % sw_state)
         text_file.close()

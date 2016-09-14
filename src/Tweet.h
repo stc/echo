@@ -4,7 +4,7 @@
 
 class Tweet {
 public:
-    Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color);
+    Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color, ofRectangle area);
     void drawMapView(ofxFontStash & mTextFont);
     void drawOriginOnMap();
     
@@ -30,5 +30,5 @@ public:
     
     bool mCanPlay = true;
     
-    
+    ofRectangle mArea;
 };

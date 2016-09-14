@@ -49,12 +49,20 @@ class ofApp : public ofBaseApp{
         void drawProcessTuner();
         bool mCanMoveTuner = false;
         int mTunerSwitch = 0;
+        int pmTunerSwitch = 0;
         vector<int> tunerAverage;
         int tunerAvgCounter = 0;
         int mTriggerAlpha = 0;
+        long mTunerSwitchTime;
+        long mTunerSwitchCounter = 0;
     
-        float mOutputVolume = 0.1;
+        long mTunerRotateTime;
+        long mTunerRotateCounter = 0;
+    
+        float mOutputVolume = 0.45;
         float mRotateAlpha = 255;
+    
+        float infoAlpha = 0;
     
         ofxFontStash mTextFont;
     

@@ -1,6 +1,6 @@
 #include "Tweet.h"
 
-Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color) {
+Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color, ofRectangle area) {
     mDate = date;
     mText = text;
     mIndex = index;
@@ -23,7 +23,9 @@ Tweet::Tweet(int index, string date, string text, ofVec2f mapPos, ofColor color)
     
     mRawPos = ofVec2f(20, index * 30);
     mMapPos = mapPos;
-    mTextPos = ofVec2f(ofRandom(400)-200, ofRandom(100)-50);
+    
+    mArea = area;
+    mTextPos = ofVec2f(mArea.x + ofRandom(mArea.width), mArea.y + ofRandom(mArea.height));
     //mTextPos = mTextOriginPos;
     mDirection = -mTextPos;
     mColor = color;
@@ -45,10 +47,11 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
     ofTranslate(mMapPos);
     ofTranslate(mTextPos);
     if(textAlpha>0) {
-        mTextPos += mDirection*0.001;
+        if(textAlpha<255) mTextPos += mDirection*0.001;
         ofSetColor(mColor,textAlpha);
+        ofSetLineWidth(2);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
-        ofSetColor(0,textAlpha*0.3);
+        ofSetColor(0,textAlpha*0.6);
         ofDrawRectangle(-5,15,180,85);
         ofSetColor(0,textAlpha * 0.2);
         //ofDrawTriangle(175,70,175,100,145,100);
@@ -68,7 +71,7 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
         column = mTextFont.drawMultiLineColumn(	splittedText[0], 16, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
         textAlpha-=0.5;
     } else {
-        mTextPos = ofVec2f(ofRandom(400)-200, ofRandom(100)-50);
+        mTextPos = ofVec2f(mArea.x + ofRandom(mArea.width), mArea.y + ofRandom(mArea.height));
     }
     ofPopMatrix();
 }

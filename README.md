@@ -1,8 +1,8 @@
 # echo
 Realtime twitter bot sonification based on [anon](https://github.com/edsu/anon) &amp; SodaLib
 
-## Status
-Unfinished code, getting closer .....    .. ... ...  ...
+## Concept
+Echo is a listening machine. It represents anonymous Wikipedia edits made by governmental institutes of different countries. A few twitter bots are observing the IP addresses of Wikipedia article editors and once these edits are made from governmental addresses, the system notifies this event to the audience: it makes a sound along a visual sign on a map. The title of the installation reflects onto these - originally unintended - sounds made by the editors, but Echo is also the name of a basic command in different operating systems that is used to display textual content on the screen, or save it to a file. The visual appearance of the installation is inspired by early radio systems that have names of cities and different frequency ranges indicated on them. It also merits from the activities of amateur (and pirate) radio activities by transforming those concepts into the digital domain. Users can “tune” between different bot sonifications by rotating a knob, this act is similar to the search for meaningful information on those original radio appliances.
 
 ## Software Components
 Built with OpenFrameworks 0.9.3. Targeted OS-es: OSX, Raspbian Jessie (Linux Arm)
