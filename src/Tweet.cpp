@@ -51,24 +51,24 @@ void Tweet::drawMapView(ofxFontStash & mTextFont) {
         ofSetColor(mColor,textAlpha);
         ofSetLineWidth(2);
         ofDrawLine(-mTextPos.x,-mTextPos.y,95,50);
-        ofSetColor(0,textAlpha*0.6);
-        ofDrawRectangle(-5,15,180,85);
-        ofSetColor(0,textAlpha * 0.2);
+        ofSetColor(0,textAlpha);
+        ofDrawRectangle(-5,15,280,150);
+        //ofSetColor(0,textAlpha * 0.2);
         //ofDrawTriangle(175,70,175,100,145,100);
         ofTranslate(10,0);
         
         ofSetColor(255,textAlpha);
         
-        mTextFont.draw(ofToString(mYear) + " / ", 16, 0, 10);
-        mTextFont.draw(ofToString(mMonth) + " / ", 16, 40, 10);
-        mTextFont.draw(ofToString(mDay), 16, 60, 10);
+        mTextFont.draw(ofToString(mYear) + " / ", 30, 0, 10);
+        mTextFont.draw(ofToString(mMonth) + " / ", 30, 80, 10);
+        mTextFont.draw(ofToString(mDay), 30, 120, 10);
     
-        ofTranslate(0,30);
+        ofTranslate(0,40);
         ofSetColor(mColor,textAlpha);
         int numLines = 0;
         bool wordsWereCropped;
         ofRectangle column;
-        column = mTextFont.drawMultiLineColumn(	splittedText[0], 16, 0, 0, MAX( 10 ,150), numLines, false, 5, true,	&wordsWereCropped);
+        column = mTextFont.drawMultiLineColumn(	splittedText[0], 30, 0, 0, MAX( 10 ,250), numLines, false, 5, true,	&wordsWereCropped);
         textAlpha-=0.5;
     } else {
         mTextPos = ofVec2f(mArea.x + ofRandom(mArea.width), mArea.y + ofRandom(mArea.height));

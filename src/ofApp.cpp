@@ -152,29 +152,36 @@ void ofApp::draw(){
     
     if(mRotateAlpha<255) mRotateAlpha += 0.1;
     
-    ofSetColor(255,mRotateAlpha);
     if(mPlayMode) {
+        ofSetColor(0,mRotateAlpha);
+        ofDrawRectangle(ofGetWidth()-510, ofGetHeight()/2-70 + sin(ofGetFrameNum()* 0.01) * 15, 700, 65);
+        ofDrawRectangle(ofGetWidth()-660, ofGetHeight()/2-40 + sin(ofGetFrameNum()* 0.01) * 15, 700, 35);
+        ofSetColor(255,mRotateAlpha);
         mTextFont.draw("ROTATE KNOB TO LISTEN TO TWEETS >>> ", 30, ofGetWidth()-500, ofGetHeight()/2-45 + sin(ofGetFrameNum()* 0.01) * 15);
         mTextFont.draw("FORGASD A TEKERŐT HOGY HALLD A TWEET-EKET", 30, ofGetWidth()-650, ofGetHeight()/2-15 + sin(ofGetFrameNum()* 0.01) * 15);
     }
     
     ofSetColor(0);
-    ofDrawRectangle(0,0,ofGetWidth(), 30);
+    ofDrawRectangle(0,0,ofGetWidth(), 70);
     ofSetColor(255);
-    mTextFont.draw("Recent Edits (Hungarian Gov) : ", 16, 10, 20);
+    mTextFont.draw("Recent Edits (Hungarian Gov) : ", 30, 10, 25);
     if(timelines.size()>0) {
-        ofSetColor(timelines[timelines.size()-1]->mColor);
         int offset = 0;
         for(int i=0; i<timelines[timelines.size()-1]->tweets.size(); i++) {
             if(i<15) {
+                ofSetColor(timelines[timelines.size()-1]->mColor,ofMap(i,0,15,255,100));
                 string tmpTxt = " " + ofSplitString(timelines[timelines.size()-1]->tweets[i]->mText, "Wikipedia")[0] + " /";
                 if(i == 0) {
-                    mTextFont.draw(tmpTxt, 16, 200 + offset, 20);
+                    mTextFont.draw(tmpTxt, 30, 340 + offset, 25);
                 }else if(i>0) {
                     string pTmpTxt = " " + ofSplitString(timelines[timelines.size()-1]->tweets[i-1]->mText, "Wikipedia")[0] + " /";
                     if(tmpTxt!=pTmpTxt) {
-                        offset += mTextFont.getBBox(pTmpTxt, 16, 0, 0).width;
-                        mTextFont.draw(tmpTxt, 16, 200 + offset, 20);
+                        offset += mTextFont.getBBox(pTmpTxt, 30, 0, 0).width;
+                        if(offset < ofGetWidth()) {
+                            mTextFont.draw(tmpTxt, 30, 340 + offset, 25);
+                        } else {
+                            mTextFont.draw(tmpTxt, 30, offset - ofGetWidth() - 40, 55);
+                        }
                     }
                 }
                 

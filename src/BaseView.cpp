@@ -1,7 +1,7 @@
 #include "BaseView.h"
 
 BaseView::BaseView() {
-    mapImg.load("assets/WorldMapBlackContrast.jpg");
+    mapImg.load("assets/WorldMap.jpg");
 }
 
 void BaseView::draw() {
