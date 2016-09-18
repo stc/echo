@@ -14,7 +14,15 @@ void ofApp::setup(){
 
     soda.init();
     soda.clear();
-    soda.createSampler("s","sounds/bleep.wav",10);
+    soda.createSampler("s0","sounds/0001.wav",4);
+    soda.createSampler("s1","sounds/0002.wav",4);
+    soda.createSampler("s2","sounds/0003.wav",4);
+    soda.createSampler("s3","sounds/0004.wav",4);
+    soda.createSampler("s4","sounds/0005.wav",4);
+    soda.createSampler("s5","sounds/0006.wav",4);
+    soda.createSampler("s6","sounds/0007.wav",4);
+    soda.createSampler("s7","sounds/bleep.wav",4);
+    
     soda.save();
     
     soda.pd.openPatch("lib/bg.pd");
@@ -168,7 +176,7 @@ void ofApp::draw(){
     if(timelines.size()>0) {
         int offset = 0;
         for(int i=0; i<timelines[timelines.size()-1]->tweets.size(); i++) {
-            if(i<15) {
+            if(i<30) {
                 ofSetColor(timelines[timelines.size()-1]->mColor,ofMap(i,0,15,255,100));
                 string tmpTxt = " " + ofSplitString(timelines[timelines.size()-1]->tweets[i]->mText, "Wikipedia")[0] + " /";
                 if(i == 0) {
@@ -282,8 +290,13 @@ int ofApp::getSequence(TimeLine * t) {
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
                 if(tweet->mCanPlay) {
-                    soda.set("s")->shift(cNotes[t->tlIndex], false);
-                    soda.set("s")->volume(mOutputVolume);
+                    //soda.set("s" + ofToString(t->tlIndex))->shift(cNotes[t->tlIndex] * 2, false);
+                    soda.set("s" + ofToString(t->tlIndex))->shift(1, false);
+                    soda.set("s" + ofToString(t->tlIndex))->volume(mOutputVolume/4 + ofRandom(50) / 100.0);
+                    
+                    soda.set("s7")->shift(cNotes[t->tlIndex] * 0.7, false);
+                    soda.set("s7")->volume(mOutputVolume + ofRandom(50) / 100.0);
+                    
                     tweet->mCanPlay = false;
                     mTriggerAlpha = 150;
                 }
