@@ -290,11 +290,8 @@ int ofApp::getSequence(TimeLine * t) {
                 tweet->textAlpha = 255;
                 cTweets[t->tlIndex] = tweet->mIndex;
                 if(tweet->mCanPlay) {
-                    //soda.set("s" + ofToString(t->tlIndex))->shift(cNotes[t->tlIndex] * 2, false);
                     soda.set("s" + ofToString(t->tlIndex))->shift(1)->volume(mOutputVolume/4 + ofRandom(50) / 100.0)->play();
-                    
-                    soda.set("s7")->shift(cNotes[t->tlIndex] * 0.7, false)->volume(mOutputVolume + ofRandom(50) / 100.0)->play();
-                    
+                    soda.set("s7")->shift(cNotes[t->tlIndex] * 0.7)->volume(mOutputVolume + ofRandom(50) / 100.0)->play();
                     tweet->mCanPlay = false;
                     mTriggerAlpha = 150;
                 }
